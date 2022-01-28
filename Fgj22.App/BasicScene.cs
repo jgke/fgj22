@@ -18,6 +18,8 @@ namespace Fgj22.App
 			SetDesignResolution(1280, 720, SceneResolutionPolicy.None);
 			Screen.SetSize(1280, 720);
 
+			var editor = CreateEntity("editor", new Vector2(300, 100));
+			editor.AddComponent(new Editor());
 
 			var playerEntity = CreateEntity("player", new Vector2(Screen.Width / 2 - 200, Screen.Height / 2 - 200));
 			playerEntity.AddComponent(new Test());

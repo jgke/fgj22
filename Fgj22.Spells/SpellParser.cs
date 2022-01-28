@@ -12,9 +12,6 @@ namespace Fgj22.Spells
     {
         public static SpellBase ParseInput(string command)
         {
-            var regex = new Regex(@"FB\([1-9]\)");
-            var match = regex.Match(command);
-
             if(Fireball.Pattern.Matches(command).Count == 1)
             {
                 return Fireball.Create(command);

@@ -16,6 +16,14 @@ namespace Fgj22.Tests
         }
 
         [Fact]
+        public void TestParser_GeneratesFireball2()
+        {
+            var spell = SpellParser.ParseInput("FB(10)");
+            Assert.NotNull(spell);
+            Assert.True(spell is Fireball fb && fb.Angle == 10);
+        }
+
+        [Fact]
         public void TestTestParser_ReturnsNull()
         {
             var spell = SpellParser.ParseInput("FB(A)");
