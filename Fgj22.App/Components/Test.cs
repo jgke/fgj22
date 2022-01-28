@@ -21,8 +21,8 @@ namespace Fgj22.App.Components
 
         public override void OnAddedToEntity()
         {
-            var texture = Entity.Scene.Content.LoadTexture("Content/caveman.png");
-            var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
+            var texture = Entity.Scene.Content.LoadTexture("Content/Sigrithr.png");
+            var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             Mover = Entity.GetComponent<TiledMapMover>();
             BoxCollider = Entity.GetComponent<BoxCollider>();
@@ -31,13 +31,14 @@ namespace Fgj22.App.Components
 
             Animator.AddAnimation("Run", new[]
             {
-                sprites[8 + 0],
-                sprites[8 + 1],
-                sprites[8 + 2],
-                sprites[8 + 3],
-                sprites[8 + 4],
-                sprites[8 + 5],
-                sprites[8 + 6]
+                sprites[0],
+                sprites[1],
+                sprites[2],
+                sprites[3],
+                sprites[4],
+                sprites[5],
+                sprites[6],
+                sprites[7],
             });
 
             SetupInput();
