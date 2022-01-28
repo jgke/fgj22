@@ -1,23 +1,31 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using Nez.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Nez.Tiled.TiledMapMover;
 
 namespace Fgj22.App.Components
 {
     class Test : Component, IUpdatable
     {
         private SpriteAnimator Animator;
+        private TiledMapMover Mover;
+        private BoxCollider BoxCollider;
         private VirtualButton InputMoveUp;
+        private CollisionState CollisionState = new CollisionState();
 
         public override void OnAddedToEntity()
         {
             var texture = Entity.Scene.Content.LoadTexture("Content/caveman.png");
             var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
+            Mover = Entity.GetComponent<TiledMapMover>();
+            BoxCollider = Entity.GetComponent<BoxCollider>();
 
             Animator.AddAnimation("Run", new[]
             {
@@ -41,10 +49,14 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
+            var velocity = new Vector2();
+
             if(InputMoveUp.IsDown)
             {
-                this.Entity.Position += new Microsoft.Xna.Framework.Vector2(0, -Time.DeltaTime * 150);
+                velocity = new Vector2(0, 150);
             }
+
+            Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
             var animation = "Run";
 
