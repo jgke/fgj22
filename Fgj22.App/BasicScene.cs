@@ -30,7 +30,8 @@ namespace Fgj22.App
 			var tiledEntity = CreateEntity("tiled-map-entity");
 			tiledEntity.AddComponent(new TiledMapRenderer(map, "main"));
 
-
+			var enemy = CreateEntity("enemy", new Vector2(Screen.Width / 2 - 200, Screen.Height / 2 - 100));
+			enemy.AddComponent(new Enemy("standard"));
 		}
 	}
 }
