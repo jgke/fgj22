@@ -26,6 +26,8 @@ namespace Fgj22.App.Components
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             Mover = Entity.GetComponent<TiledMapMover>();
             BoxCollider = Entity.GetComponent<BoxCollider>();
+            Entity.AddComponent(new Health(5));
+            Entity.AddComponent(new Team(1));
 
             Animator.AddAnimation("Run", new[]
             {
@@ -51,7 +53,7 @@ namespace Fgj22.App.Components
         {
             var velocity = new Vector2();
 
-            if(InputMoveUp.IsDown)
+            if (InputMoveUp.IsDown)
             {
                 velocity = new Vector2(0, 150);
             }
