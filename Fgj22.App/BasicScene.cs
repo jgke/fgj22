@@ -1,6 +1,7 @@
 ﻿using Nez.Sprites;
 using Microsoft.Xna.Framework;
 using Nez;
+using Fgj22.App.Components;
 
 namespace Fgj22.App
 {
@@ -16,6 +17,7 @@ namespace Fgj22.App
 			Screen.SetSize(1280, 720);
 
 			var playerEntity = CreateEntity("player", new Vector2(Screen.Width / 2, Screen.Height / 2));
+			playerEntity.AddComponent(new Test());
 		}
 	}
 }
