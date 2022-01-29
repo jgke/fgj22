@@ -10,6 +10,7 @@ using Nez.UI;
 using System.Collections.Generic;
 using Serilog;
 using System;
+using Microsoft.Xna.Framework.Input;
 
 namespace Fgj22.App
 {
@@ -47,17 +48,22 @@ namespace Fgj22.App
         }
     }
 
-    class StoryComponent : Component {
+    class StoryComponent : Component, IUpdatable {
         int SceneNumber;
         int storyLine = 0;
         Story story;
         Table table;
+        private VirtualButton StoryAdvanceButton;
 
         public StoryComponent(int sceneNumber) {
             this.SceneNumber = sceneNumber;
         }
 
         public override void OnAddedToEntity() {
+            StoryAdvanceButton = new VirtualButton();
+            StoryAdvanceButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
+            StoryAdvanceButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
+
             switch(SceneNumber) {
                 case 0:
                     story = new StoryBuilder()
@@ -80,6 +86,11 @@ namespace Fgj22.App
             CycleStory();
         }
 
+        public override void OnRemovedFromEntity()
+        {
+            StoryAdvanceButton.Deregister();
+        }
+
         public void CycleStory() {
             Log.Information("Cycle {A} {B}", storyLine, story.Content);
             if(storyLine >= story.Content.Count) {
@@ -98,9 +109,15 @@ namespace Fgj22.App
                 table.Add( button1 ).SetMinHeight( 100 ).Expand().Bottom().SetFillX();
                 table.Row();
                 button1.OnClicked += _ => {
-                    storyLine += 1;
                     CycleStory();
                 };
+                storyLine += 1;
+            }
+        }
+
+        void IUpdatable.Update() {
+            if (StoryAdvanceButton.IsPressed) {
+                CycleStory();
             }
         }
     }
