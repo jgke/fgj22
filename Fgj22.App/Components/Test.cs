@@ -17,7 +17,9 @@ namespace Fgj22.App.Components
         private TiledMapMover Mover;
         [Loggable]
         private BoxCollider BoxCollider;
-        private VirtualButton InputMoveUp;
+
+        VirtualIntegerAxis _xAxisInput;
+        VirtualIntegerAxis _yAxisInput;
         [Loggable]
         private CollisionState CollisionState = new CollisionState();
 
@@ -46,20 +48,30 @@ namespace Fgj22.App.Components
             SetupInput();
         }
 
+        public override void OnRemovedFromEntity() {
+            _xAxisInput.Deregister();
+            _yAxisInput.Deregister();
+        }
+
         void SetupInput()
         {
-            InputMoveUp = new VirtualButton();
-            InputMoveUp.Nodes.Add(new VirtualButton.KeyboardKey(Keys.W));
+            // horizontal input from dpad, left stick or keyboard left/right
+            _xAxisInput = new VirtualIntegerAxis();
+            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
+            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
+            _xAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
+
+            // vertical input from dpad, left stick or keyboard up/down
+            _yAxisInput = new VirtualIntegerAxis();
+            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
+            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
+            _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+
         }
 
         public void Update()
         {
-            var velocity = new Vector2();
-
-            if (InputMoveUp.IsDown)
-            {
-                velocity = new Vector2(0, 150);
-            }
+            var velocity = new Vector2(_xAxisInput.Value, _yAxisInput.Value) * 150;
 
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
