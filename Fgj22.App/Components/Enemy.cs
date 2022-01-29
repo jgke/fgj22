@@ -8,13 +8,18 @@ using Nez.Tiled;
 
 namespace Fgj22.App.Components
 {
-    public class Enemy : Component, ILoggable
+    public class Enemy : Component, IUpdatable, ILoggable
     {
         private SpriteAnimator Animator;
         [Loggable]
         string ty;
         private readonly Player Player;
         private readonly TmxMap Map;
+
+        private bool Shoots;
+        private int MinimumShootingDistance;
+        private float ReloadTime;
+        private float ReloadLeft;
 
         public Enemy(string ty, Player player, TmxMap map)
         {
@@ -52,6 +57,7 @@ namespace Fgj22.App.Components
                         sprites[0 + 3],
                         sprites[0 + 4]
                     };
+                    Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
                     break;
 
                 case "Von Neumann Swarm":
@@ -68,6 +74,7 @@ namespace Fgj22.App.Components
                         sprites[0 + 3],
                         sprites[0 + 4]
                     };
+                    Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
                     break;
 
                 default:
@@ -81,6 +88,12 @@ namespace Fgj22.App.Components
                     {
                         sprites[8 + 0],
                     };
+
+                    Entity.AddComponent(new EnemyAI(Player, Map, this, 1, 50));
+                    Shoots = true;
+                    MinimumShootingDistance = 300;
+                    ReloadTime = 3;
+
                     break;
             }
 
@@ -90,12 +103,44 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Damage(collisionDamage, false));
             Entity.AddComponent(BoxCollider);
             Entity.AddComponent(new Team(Faction.Enemy, true));
-            Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
 
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             Animator.AddAnimation("Stay", stayAnimationFrames);
             Animator.Play("Stay");
+        }
+
+        void ShootProjectile()
+        {
+            ReloadLeft -= Time.DeltaTime;
+
+            if(Entity.Transform.Position.Pythagoras(Player.Transform.Position) > MinimumShootingDistance)
+            {
+                return;
+            }
+
+            if(ReloadLeft <= 0)
+            {
+                ReloadLeft = ReloadTime;
+            }
+            else
+            {
+                return;
+            }
+
+            var entity = Entity.Scene.CreateEntity("projectile", Entity.Transform.Position);
+
+            var targetAngle = (Player.Transform.Position - Transform.Position).GetAngle();
+
+            entity.AddComponent(new EnemyProjectile(targetAngle));
+        }
+
+        public void Update()
+        {
+            if(Shoots)
+            {
+                ShootProjectile();
+            }
         }
     }
 }

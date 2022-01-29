@@ -50,6 +50,9 @@ namespace Fgj22.App
                 enemy.AddComponent(new Enemy("Von Neumann Swarm", player, map));
             }
 
+            var shootingEnemy = CreateEntity("enemy", new Vector2(200, 200));
+            shootingEnemy.AddComponent(new Enemy("asd", player, map));
+
             Camera.Entity.AddComponent(new FollowCamera(playerEntity));
             tiledEntity.AddComponent(cameraBounds);
             tiledEntity.AddComponent(cameraBounds);
