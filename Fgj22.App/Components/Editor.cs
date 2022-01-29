@@ -32,7 +32,7 @@ namespace Fgj22.App.Components
         {
             InputOpen = new VirtualButton();
             InputOpen.Nodes.Add(new VirtualButton.KeyboardKey(Keys.LeftControl));
-            
+
             InputQ = new VirtualButton();
             InputQ.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Q));
         }
@@ -54,7 +54,7 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-            if(InputOpen.IsPressed)
+            if (InputOpen.IsPressed)
             {
                 Visible = !Visible;
 
@@ -63,13 +63,13 @@ namespace Fgj22.App.Components
             }
             else
             {
-                if(InputQ.IsPressed)
+                if (InputQ.IsPressed)
                 {
                     Content += "Q";
                 }
             }
 
-            if(Visible)
+            if (Visible)
             {
                 Text.Text = Content;
             }

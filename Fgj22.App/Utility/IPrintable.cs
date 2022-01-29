@@ -9,14 +9,18 @@ using Serilog.Core;
 
 namespace Fgj22.App
 {
-    public interface ILoggable {
-        Dictionary<string, object> GetFields() {
+    public interface ILoggable
+    {
+        Dictionary<string, object> GetFields()
+        {
             Dictionary<string, object> res = new Dictionary<string, object>();
             Type ty = this.GetType();
             FieldInfo[] fields = ty.GetFields();
-            for (int i = 0; i < fields.Length; i++) {
-                var att = (Loggable) Attribute.GetCustomAttribute(fields[i], typeof (Loggable));
-                if(att != null) {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                var att = (Loggable)Attribute.GetCustomAttribute(fields[i], typeof(Loggable));
+                if (att != null)
+                {
                     res.Add(fields[i].Name, fields[i].GetValue(this));
                 }
             }
@@ -25,15 +29,16 @@ namespace Fgj22.App
     }
 
     [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-    public class Loggable : Attribute {}
+    public class Loggable : Attribute { }
 
-    public class LoggableDestructuringPolicy : IDestructuringPolicy {
+    public class LoggableDestructuringPolicy : IDestructuringPolicy
+    {
         public bool TryDestructure(object value, ILogEventPropertyValueFactory propertyValueFactory, out LogEventPropertyValue result)
         {
             if (value is ILoggable response)
             {
                 Type ty = response.GetType();
-                result = propertyValueFactory.CreatePropertyValue(new Dictionary<string, Dictionary<string, object>>{{ty.Name, response.GetFields()}});
+                result = propertyValueFactory.CreatePropertyValue(new Dictionary<string, Dictionary<string, object>> { { ty.Name, response.GetFields() } });
                 return true;
             }
 

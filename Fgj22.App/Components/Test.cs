@@ -48,7 +48,8 @@ namespace Fgj22.App.Components
             SetupInput();
         }
 
-        public override void OnRemovedFromEntity() {
+        public override void OnRemovedFromEntity()
+        {
             _xAxisInput.Deregister();
             _yAxisInput.Deregister();
         }
