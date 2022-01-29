@@ -128,12 +128,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup color="#ff0000" id="4" name="danger-zone">
-  <object id="26" name="danger-zone" x="112" y="400">
-   <polygon points="0,0 240,0 176,64 64,64"/>
-  </object>
-  <object id="27" name="danger-zone" x="480.667" y="397.333">
-   <polygon points="-0.666667,2.66667 143.333,2.66667 143.333,66.6667 -0.666667,66.6667"/>
-  </object>
+ <objectgroup id="4" name="enemies">
+  <object id="22" name="enemyspawn" x="200" y="240"/>
  </objectgroup>
 </map>
