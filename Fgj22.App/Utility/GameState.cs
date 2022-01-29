@@ -17,6 +17,8 @@ namespace Fgj22.App
 
         [Loggable]
         public int LevelNum;
+        [Loggable]
+        public int PlayerSpeed = 150;
 
         public GameState(int levelNum)
         {
