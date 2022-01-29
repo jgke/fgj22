@@ -181,7 +181,7 @@ namespace Fgj22.App.Components
 
             UpdateSpells();
 
-            if (MovementPathPos != -1) {
+            if (MovementPathPos != -1 && XAxisInput.Value == 0 && YAxisInput.Value == 0) {
                 var direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
                 if (direction.Length() < 5) {
                     MovementPathPos += 1;
@@ -194,6 +194,8 @@ namespace Fgj22.App.Components
                 direction.Normalize();
                 velocity = direction * 150;
             } else {
+                MovementPath = new List<Vector2>();
+                MovementPathPos = -1;
                 velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
             }
 
