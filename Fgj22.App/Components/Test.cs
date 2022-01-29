@@ -11,12 +11,14 @@ using static Nez.Tiled.TiledMapMover;
 
 namespace Fgj22.App.Components
 {
-    class Test : Component, IUpdatable
+    class Test : Component, IUpdatable, ILoggable
     {
         private SpriteAnimator Animator;
         private TiledMapMover Mover;
+        [Loggable]
         private BoxCollider BoxCollider;
         private VirtualButton InputMoveUp;
+        [Loggable]
         private CollisionState CollisionState = new CollisionState();
 
         public override void OnAddedToEntity()

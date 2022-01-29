@@ -4,10 +4,11 @@ using System;
 
 namespace Fgj22.App.Components
 {
-    public class Health : Component
+    public class Health : Component, ILoggable
     {
-
+        [Loggable]
         public int Maximum;
+        [Loggable]
         public int Current;
 
         public Health(int Maximum)

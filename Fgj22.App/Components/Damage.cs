@@ -1,13 +1,15 @@
 using Microsoft.Xna.Framework;
 using Nez;
 using System;
+using Serilog;
 
 namespace Fgj22.App.Components
 {
-    public class Damage : Component, IUpdatable
+    public class Damage : Component, IUpdatable, ILoggable
     {
-
+        [Loggable]
         int OnHit;
+        [Loggable]
         bool destroyOnHit;
 
         public Damage(int damageOnHit, bool destroyOnHit)
@@ -42,7 +44,7 @@ namespace Fgj22.App.Components
             Team otherTeam = other.GetComponent<Team>();
             Health otherHealth = other.GetComponent<Health>();
 
-            Console.WriteLine("myTeam: " + myTeam + " other: " + otherTeam + " otherHealth: " + otherHealth);
+            Log.Information("myTeam: {A}, other: {@B}, otherHealth: {@C}", myTeam, otherTeam, otherHealth);
 
             if (otherTeam != null && otherHealth != null && myTeam != otherTeam.TeamNum)
             {

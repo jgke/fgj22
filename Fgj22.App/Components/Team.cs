@@ -3,8 +3,9 @@ using Nez;
 
 namespace Fgj22.App.Components
 {
-    public class Team : Component
+    public class Team : Component, ILoggable
     {
+        [Loggable]
         public int TeamNum;
 
         public Team(int teamNum)

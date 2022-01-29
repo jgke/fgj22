@@ -6,9 +6,10 @@ using Nez.Sprites;
 
 namespace Fgj22.App.Components
 {
-    public class Enemy : Component
+    public class Enemy : Component, ILoggable
     {
         private SpriteAnimator Animator;
+        [Loggable]
         string ty;
         public Enemy(string ty)
         {
