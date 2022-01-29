@@ -8,7 +8,7 @@ namespace Fgj22.App.Components
     public class Lifetime : Component, IUpdatable
     {
         private float Seconds;
-        
+
         public Lifetime(float seconds)
         {
             Seconds = seconds;
@@ -18,7 +18,7 @@ namespace Fgj22.App.Components
         {
             Seconds -= Time.DeltaTime;
 
-            if(Seconds <= 0)
+            if (Seconds <= 0)
             {
                 Entity.Destroy();
             }

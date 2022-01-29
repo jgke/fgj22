@@ -14,61 +14,73 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Fgj22.App
 {
-    class StoryPiece {
-         public string Character;
-         public string Text;
+    class StoryPiece
+    {
+        public string Character;
+        public string Text;
 
-         public StoryPiece(string character, string text) {
-             this.Character = character;
-             this.Text = text;
-         }
+        public StoryPiece(string character, string text)
+        {
+            this.Character = character;
+            this.Text = text;
+        }
     }
 
-    class StoryBuilder {
+    class StoryBuilder
+    {
         public List<StoryPiece> lines;
-        public StoryBuilder() {
+        public StoryBuilder()
+        {
             lines = new List<StoryPiece>();
         }
-        
-        public StoryBuilder Line(string by, string what) {
+
+        public StoryBuilder Line(string by, string what)
+        {
             lines.Add(new StoryPiece(by, what));
             return this;
         }
 
-        public Story Build() {
+        public Story Build()
+        {
             return new Story(lines);
         }
     }
 
-    class Story {
+    class Story
+    {
         public List<StoryPiece> Content;
 
-        public Story(List<StoryPiece> content) {
+        public Story(List<StoryPiece> content)
+        {
             this.Content = content;
         }
     }
 
-    class StoryComponent : Component, IUpdatable {
+    class StoryComponent : Component, IUpdatable
+    {
         int SceneNumber;
         int storyLine = 0;
         Story story;
         Table table;
         private VirtualButton StoryAdvanceButton;
 
-        public StoryComponent(int sceneNumber) {
+        public StoryComponent(int sceneNumber)
+        {
             this.SceneNumber = sceneNumber;
         }
 
-        public override void OnAddedToEntity() {
+        public override void OnAddedToEntity()
+        {
             StoryAdvanceButton = new VirtualButton();
             StoryAdvanceButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
             StoryAdvanceButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
 
-            switch(SceneNumber) {
+            switch (SceneNumber)
+            {
                 case 0:
                     story = new StoryBuilder()
-                        .Line("Content/SigrithrAvatar.png", "moi") 
-                        .Line("Content/VonNeumannAvatar.png", "no moi") 
+                        .Line("Content/SigrithrAvatar.png", "moi")
+                        .Line("Content/VonNeumannAvatar.png", "no moi")
                         .Build();
                     break;
 
@@ -80,8 +92,8 @@ namespace Fgj22.App
             UICanvas canvas = new UICanvas();
             Entity.AddComponent(canvas);
 
-            table = canvas.Stage.AddElement( new Table() );
-            table.SetFillParent( true );
+            table = canvas.Stage.AddElement(new Table());
+            table.SetFillParent(true);
 
             CycleStory();
         }
@@ -91,32 +103,42 @@ namespace Fgj22.App
             StoryAdvanceButton.Deregister();
         }
 
-        public void CycleStory() {
+        public void CycleStory()
+        {
             Log.Information("Cycle {A} {B}", storyLine, story.Content);
-            if(storyLine >= story.Content.Count) {
-                try {
-                    Core.StartSceneTransition( new WindTransition( () => new GameplayScene() ) );
-                } catch (Exception e) {
+            if (storyLine >= story.Content.Count)
+            {
+                try
+                {
+                    Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
+                }
+                catch (Exception e)
+                {
                     Log.Information("{e}", e);
                 }
-            } else {
+            }
+            else
+            {
                 var line = story.Content[storyLine];
                 table.ClearChildren();
                 table.Bottom();
                 var img = new Image(Entity.Scene.Content.LoadTexture(line.Character));
-                table.Add( img ).Bottom().Width( 100 ).Height( 100 );
-                var button1 = new TextButton(line.Text, TextButtonStyle.Create( Color.Black, Color.DarkGray, Color.Green ) );
-                table.Add( button1 ).SetMinHeight( 100 ).Expand().Bottom().SetFillX();
+                table.Add(img).Bottom().Width(100).Height(100);
+                var button1 = new TextButton(line.Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
                 table.Row();
-                button1.OnClicked += _ => {
+                button1.OnClicked += _ =>
+                {
                     CycleStory();
                 };
                 storyLine += 1;
             }
         }
 
-        void IUpdatable.Update() {
-            if (StoryAdvanceButton.IsPressed) {
+        void IUpdatable.Update()
+        {
+            if (StoryAdvanceButton.IsPressed)
+            {
                 CycleStory();
             }
         }
@@ -125,7 +147,8 @@ namespace Fgj22.App
     public class StoryScene : ProgramScene
     {
         int SceneNumber;
-        public StoryScene(int sceneNumber) {
+        public StoryScene(int sceneNumber)
+        {
             SceneNumber = sceneNumber;
         }
         public override void Initialize()

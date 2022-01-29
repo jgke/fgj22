@@ -38,7 +38,7 @@ namespace Fgj22.App.Components
             var myTeam = this.Entity.GetComponent<Team>().Faction;
             Team otherTeam = other.GetComponent<Team>();
 
-            if(otherTeam == null || !otherTeam.CanBeCollidedWith)
+            if (otherTeam == null || !otherTeam.CanBeCollidedWith)
             {
                 return;
             }

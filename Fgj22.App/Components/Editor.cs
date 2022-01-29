@@ -38,7 +38,7 @@ namespace Fgj22.App.Components
 
         void SetupInput()
         {
-            for(int i = (int)Keys.A; i <= (int)Keys.Z; i ++)
+            for (int i = (int)Keys.A; i <= (int)Keys.Z; i++)
             {
                 var key = (Keys)i;
                 TextInput.Add((new KeyboardKey(key), key.ToString().ToUpper()));
@@ -96,16 +96,16 @@ namespace Fgj22.App.Components
             {
                 Content += pressedButton.text;
             }
-            else if(Backspace.IsPressed && Content.Length > 0)
+            else if (Backspace.IsPressed && Content.Length > 0)
             {
                 Content = Content[0..^1];
             }
             else if (Execute.IsPressed)
             {
                 var spell = SpellParser.ParseInput(Content);
-                
 
-                if(spell != null)
+
+                if (spell != null)
                 {
                     Spells.Enqueue(spell);
                     Content = "";

@@ -43,7 +43,7 @@ namespace Fgj22.App.Components
             {
                 var route = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(Entity.Transform.Position, Target.Transform.Position);
 
-                if(route != null && route.Any())
+                if (route != null && route.Any())
                 {
                     route.Reverse();
                     MovementPath = new Stack<Vector2>(route);
@@ -79,6 +79,6 @@ namespace Fgj22.App.Components
             FrequencyCounter += 1;
         }
 
-        
+
     }
 }

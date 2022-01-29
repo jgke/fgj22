@@ -2,55 +2,57 @@ using Microsoft.Xna.Framework;
 using Nez;
 using System;
 
-namespace Fgj22.App.Components {
-    public class CameraBounds : Component, IUpdatable {
-		public Vector2 Min, Max;
+namespace Fgj22.App.Components
+{
+    public class CameraBounds : Component, IUpdatable
+    {
+        public Vector2 Min, Max;
 
 
-		public CameraBounds()
-		{
-			// make sure we run last so the camera is already moved before we evaluate its position
-			SetUpdateOrder(int.MaxValue);
-		}
-
-
-		public CameraBounds(Vector2 min, Vector2 max) : this()
-		{
-			Min = min;
-			Max = max;
-		}
-
-
-		public override void OnAddedToEntity()
-		{
-			Entity.UpdateOrder = int.MaxValue;
-		}
-
-
-		void IUpdatable.Update()
-		{
-			var cameraBounds = Entity.Scene.Camera.Bounds;
-
-			Entity.Scene.Camera.Position += GetTunedCameraPosition();
-		}
-
-		public Vector2 GetTunedCameraPosition()
+        public CameraBounds()
         {
-			var cameraBounds = Entity.Scene.Camera.Bounds;
+            // make sure we run last so the camera is already moved before we evaluate its position
+            SetUpdateOrder(int.MaxValue);
+        }
 
-			if (cameraBounds.Top < Min.Y)
-				return new Vector2(0, Min.Y - cameraBounds.Top);
 
-			if (cameraBounds.Left < Min.X)
-				return new Vector2(Min.X - cameraBounds.Left, 0);
+        public CameraBounds(Vector2 min, Vector2 max) : this()
+        {
+            Min = min;
+            Max = max;
+        }
 
-			if (cameraBounds.Bottom > Max.Y)
-				return new Vector2(0, Max.Y - cameraBounds.Bottom);
 
-			if (cameraBounds.Right > Max.X)
-				return new Vector2(Max.X - cameraBounds.Right, 0);
+        public override void OnAddedToEntity()
+        {
+            Entity.UpdateOrder = int.MaxValue;
+        }
 
-			return new Vector2();
-		}
+
+        void IUpdatable.Update()
+        {
+            var cameraBounds = Entity.Scene.Camera.Bounds;
+
+            Entity.Scene.Camera.Position += GetTunedCameraPosition();
+        }
+
+        public Vector2 GetTunedCameraPosition()
+        {
+            var cameraBounds = Entity.Scene.Camera.Bounds;
+
+            if (cameraBounds.Top < Min.Y)
+                return new Vector2(0, Min.Y - cameraBounds.Top);
+
+            if (cameraBounds.Left < Min.X)
+                return new Vector2(Min.X - cameraBounds.Left, 0);
+
+            if (cameraBounds.Bottom > Max.Y)
+                return new Vector2(0, Max.Y - cameraBounds.Bottom);
+
+            if (cameraBounds.Right > Max.X)
+                return new Vector2(Max.X - cameraBounds.Right, 0);
+
+            return new Vector2();
+        }
     }
 }

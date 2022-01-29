@@ -58,6 +58,12 @@
     <None Update="Content\VonNeumannAvatar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\music\Menu_You_reAHackerLarry.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\music\You_reAHackerLarry.ogg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\editor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

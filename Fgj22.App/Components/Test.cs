@@ -43,7 +43,8 @@ namespace Fgj22.App.Components
         private List<Vector2> MovementPath;
         private int MovementPathPos = -1;
 
-        public Test(TmxMap Map, Editor editor) {
+        public Test(TmxMap Map, Editor editor)
+        {
             this.Map = Map;
             Editor = editor;
         }
@@ -143,12 +144,12 @@ namespace Fgj22.App.Components
             if (velocity != Vector2.Zero)
             {
 
-                float rotation = 180 - velocity.Angle2(new Vector2(0,1));
+                float rotation = 180 - velocity.Angle2(new Vector2(0, 1));
                 //Entity.Transform.Rotation = rotation * Mathf.Deg2Rad ;
                 animation = "Run";
             }
 
-            
+
             if (animation != null && !Animator.IsAnimationActive(animation))
             {
                 Animator.Play(animation);
@@ -157,7 +158,7 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-            if(OpenEditor.IsPressed)
+            if (OpenEditor.IsPressed)
             {
                 Editor.SetVisibility(!Editor.Enabled);
             }
@@ -181,19 +182,26 @@ namespace Fgj22.App.Components
 
             UpdateSpells();
 
-            if (MovementPathPos != -1 && XAxisInput.Value == 0 && YAxisInput.Value == 0) {
+            if (MovementPathPos != -1 && XAxisInput.Value == 0 && YAxisInput.Value == 0)
+            {
                 var direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
-                if (direction.Length() < 5) {
+                if (direction.Length() < 5)
+                {
                     MovementPathPos += 1;
-                    if(MovementPathPos < MovementPath.Count) {
+                    if (MovementPathPos < MovementPath.Count)
+                    {
                         direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
-                    } else {
+                    }
+                    else
+                    {
                         MovementPathPos = -1;
                     }
                 }
                 direction.Normalize();
                 velocity = direction * 150;
-            } else {
+            }
+            else
+            {
                 MovementPath = new List<Vector2>();
                 MovementPathPos = -1;
                 velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
@@ -246,11 +254,11 @@ namespace Fgj22.App.Components
 
         private void UpdateSpells()
         {
-            if(Editor.Spells.Any())
+            if (Editor.Spells.Any())
             {
                 var spell = Editor.Spells.Dequeue();
 
-                if(spell is Fireball fb)
+                if (spell is Fireball fb)
                 {
                     var entity = Entity.Scene.CreateEntity("fireball", Entity.Transform.Position);
                     entity.AddComponent(new Emp(-fb.Angle * Math.PI / 180));
@@ -258,7 +266,8 @@ namespace Fgj22.App.Components
             }
         }
 
-        public override void DebugRender(Batcher batcher) {
+        public override void DebugRender(Batcher batcher)
+        {
             base.DebugRender(batcher);
             var mouseLocation = Entity.Scene.Camera.MouseToWorldPoint();
             batcher.DrawPixel(mouseLocation.X, mouseLocation.Y, Debug.Colors.DebugText, 3);
