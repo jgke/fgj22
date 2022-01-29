@@ -42,7 +42,7 @@ namespace Fgj22.App.Components
             {
                 var route = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(Entity.Transform.Position, Target.Transform.Position);
 
-                if(route != null && route.Any() && (MovementPath == null || !MovementPath.Any()))
+                if(route != null && route.Any())
                 {
                     route.Reverse();
                     MovementPath = new Stack<Vector2>(route);
@@ -69,9 +69,25 @@ namespace Fgj22.App.Components
                 direction = Target.Transform.Position - Entity.Transform.Position;
             }
             direction.Normalize();
-            velocity = direction * 1;
+            velocity = direction * 1; // TODO
 
             Mover.Move(velocity, Parent.BoxCollider, Parent.CollisionState);
+
+            if (direction.X != 0)
+            {
+                Transform.Rotation = (float)Math.Tanh(direction.Y / direction.X);
+            }
+            else
+            {
+                if(direction.Y < 0)
+                {
+                    Transform.Rotation = (float)Math.PI / 2.0f;
+                }
+                else
+                {
+                    Transform.Rotation = (float)Math.PI / 2.0f * 3.0f;
+                }
+            }
 
         }
 
