@@ -12,14 +12,14 @@ namespace Fgj22.App.Components
 {
     public class EnemyAI : Component, IUpdatable
     {
-        private Test Target;
+        private Player Target;
         private int FrequencyCounter = 0;
         private TmxMap Map;
         private readonly Enemy Parent;
         private TiledMapMover Mover;
         private Stack<Vector2> MovementPath;
 
-        public EnemyAI(Test target, TmxMap map, Enemy enemy)
+        public EnemyAI(Player target, TmxMap map, Enemy enemy)
         {
             Target = target;
             Map = map;

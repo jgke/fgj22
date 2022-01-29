@@ -17,7 +17,7 @@ using Fgj22.App.Utility;
 
 namespace Fgj22.App.Components
 {
-    public class Test : Component, IUpdatable, ILoggable
+    public class Player : Component, IUpdatable, ILoggable
     {
         private SpriteAnimator Animator;
         private TiledMapMover Mover;
@@ -43,7 +43,7 @@ namespace Fgj22.App.Components
         private List<Vector2> MovementPath;
         private int MovementPathPos = -1;
 
-        public Test(TmxMap Map, Editor editor)
+        public Player(TmxMap Map, Editor editor)
         {
             this.Map = Map;
             Editor = editor;

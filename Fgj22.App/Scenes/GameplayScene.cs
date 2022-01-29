@@ -40,7 +40,7 @@ namespace Fgj22.App
             var playerSpawnPosition = new Vector2(playerSpawn.X, playerSpawn.Y);
             var playerEntity = CreateEntity("player", playerSpawnPosition);
 
-            var player = new Test(map, editorComponent);
+            var player = new Player(map, editorComponent);
             playerEntity.AddComponent(player);
 
             var enemySpawns = map.GetObjectGroup("enemies").Objects;

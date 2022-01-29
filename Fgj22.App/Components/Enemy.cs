@@ -13,10 +13,10 @@ namespace Fgj22.App.Components
         private SpriteAnimator Animator;
         [Loggable]
         string ty;
-        private readonly Test Player;
+        private readonly Player Player;
         private readonly TmxMap Map;
 
-        public Enemy(string ty, Test player, TmxMap map)
+        public Enemy(string ty, Player player, TmxMap map)
         {
             this.ty = ty;
             Player = player;
