@@ -33,7 +33,9 @@ namespace Fgj22.App
 			var playerSpawn = map.GetObjectGroup("objects").Objects["spawn"];
 			var playerSpawnPosition = new Vector2(playerSpawn.X, playerSpawn.Y);
             var playerEntity = CreateEntity("player", playerSpawnPosition);
-            playerEntity.AddComponent(new Test(map, editorComponent));
+
+            var player = new Test(map, editorComponent);
+            playerEntity.AddComponent(player);
 
 
 
@@ -41,7 +43,7 @@ namespace Fgj22.App
 			foreach (TmxObject itemSpawnPoint in enemySpawns)
 			{
 				var enemy = CreateEntity("enemy", new Vector2(itemSpawnPoint.X, itemSpawnPoint.Y));
-                enemy.AddComponent(new Enemy("Von Neumann Swarm"));
+                enemy.AddComponent(new Enemy("Von Neumann Swarm", player, map));
 			}
 
             Camera.Entity.AddComponent(new FollowCamera(playerEntity));

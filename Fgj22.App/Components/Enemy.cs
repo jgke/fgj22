@@ -4,6 +4,7 @@ using System;
 using Nez.Textures;
 using Nez.Sprites;
 using Fgj22.App.Utility;
+using Nez.Tiled;
 
 namespace Fgj22.App.Components
 {
@@ -12,10 +13,19 @@ namespace Fgj22.App.Components
         private SpriteAnimator Animator;
         [Loggable]
         string ty;
-        public Enemy(string ty)
+        private readonly Test Player;
+        private readonly TmxMap Map;
+
+        public Enemy(string ty, Test player, TmxMap map)
         {
             this.ty = ty;
+            Player = player;
+            Map = map;
         }
+
+        public BoxCollider BoxCollider { get; internal set; }
+        public TiledMapMover.CollisionState CollisionState { get; internal set; } = new TiledMapMover.CollisionState();
+
 
         public override void OnAddedToEntity()
         {
@@ -74,10 +84,13 @@ namespace Fgj22.App.Components
                     break;
             }
 
+            BoxCollider = new BoxCollider(-8, -16, 16, 32);
+
             Entity.AddComponent(new Health(health));
             Entity.AddComponent(new Damage(collisionDamage, false));
-            Entity.AddComponent(new BoxCollider(-8, -16, 16, 32));
+            Entity.AddComponent(BoxCollider);
             Entity.AddComponent(new Team(Faction.Enemy, true));
+            Entity.AddComponent(new EnemyAI(Player, Map, this));
 
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));

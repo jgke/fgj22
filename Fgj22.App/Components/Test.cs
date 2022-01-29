@@ -17,7 +17,7 @@ using Fgj22.App.Utility;
 
 namespace Fgj22.App.Components
 {
-    class Test : Component, IUpdatable, ILoggable
+    public class Test : Component, IUpdatable, ILoggable
     {
         private SpriteAnimator Animator;
         private TiledMapMover Mover;
