@@ -13,6 +13,7 @@ using Nez.Tweens;
 using Serilog;
 using System.Linq;
 using Fgj22.Spells.Spell;
+using Fgj22.App.Utility;
 
 namespace Fgj22.App.Components
 {
@@ -59,7 +60,7 @@ namespace Fgj22.App.Components
             BoxCollider = Entity.GetComponent<BoxCollider>();
 
             Entity.AddComponent(new Health(5));
-            Entity.AddComponent(new Team(1));
+            Entity.AddComponent(new Team(Faction.Friendly));
 
             int r = 8;
             Animator.AddAnimation("Idle", new[]

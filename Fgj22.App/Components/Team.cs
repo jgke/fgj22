@@ -1,3 +1,4 @@
+using Fgj22.App.Utility;
 using Microsoft.Xna.Framework;
 using Nez;
 
@@ -6,11 +7,11 @@ namespace Fgj22.App.Components
     public class Team : Component, ILoggable
     {
         [Loggable]
-        public int TeamNum;
+        public Faction Faction;
 
-        public Team(int teamNum)
+        public Team(Faction team)
         {
-            this.TeamNum = teamNum;
+            this.Faction = team;
         }
     }
 }

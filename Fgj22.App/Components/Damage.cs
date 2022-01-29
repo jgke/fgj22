@@ -32,7 +32,7 @@ namespace Fgj22.App.Components
             {
                 if (Entity.GetComponent<Collider>().Overlaps(collider))
                 {
-                    DoCollision(Entity);
+                    DoCollision(collider.Entity);
                 }
             }
         }
@@ -40,15 +40,19 @@ namespace Fgj22.App.Components
         private void DoCollision(Entity other)
         {
             Console.WriteLine("Damage OnTriggerEnter");
-            int myTeam = this.Entity.GetComponent<Team>().TeamNum;
+            var myTeam = this.Entity.GetComponent<Team>().Faction;
             Team otherTeam = other.GetComponent<Team>();
             Health otherHealth = other.GetComponent<Health>();
 
             Log.Information("myTeam: {A}, other: {@B}, otherHealth: {@C}", myTeam, otherTeam, otherHealth);
 
-            if (otherTeam != null && otherHealth != null && myTeam != otherTeam.TeamNum)
+            if (otherTeam != null && otherHealth != null && myTeam != otherTeam.Faction)
             {
                 otherHealth.Hit(OnHit);
+            }
+            else
+            {
+                return;
             }
 
             if (this.destroyOnHit)

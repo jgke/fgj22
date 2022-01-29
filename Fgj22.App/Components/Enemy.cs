@@ -3,6 +3,7 @@ using Nez;
 using System;
 using Nez.Textures;
 using Nez.Sprites;
+using Fgj22.App.Utility;
 
 namespace Fgj22.App.Components
 {
@@ -76,7 +77,7 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Health(health));
             Entity.AddComponent(new Damage(collisionDamage, true));
             Entity.AddComponent(new BoxCollider(-8, -16, 16, 32));
-            Entity.AddComponent(new Team(2));
+            Entity.AddComponent(new Team(Faction.Enemy));
 
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));

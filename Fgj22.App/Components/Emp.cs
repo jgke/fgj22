@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Fgj22.App.Utility;
+using Microsoft.Xna.Framework;
 using Nez;
 using Nez.Sprites;
 using System;
@@ -23,6 +24,10 @@ namespace Fgj22.App.Components
             var texture = Entity.Scene.Content.LoadTexture("Content/fireball.png");
             var renderer = new SpriteRenderer(texture);
             Entity.AddComponent(renderer);
+            Entity.AddComponent(new Damage(10, true));
+            Entity.AddComponent(new Team(Faction.Friendly));
+            Entity.AddComponent(new BoxCollider(30, 30));
+            Entity.AddComponent(new Health(1000));
 
             this.AddComponent(new Velocity(velocity2));
         }
