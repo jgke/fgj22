@@ -216,10 +216,10 @@ namespace Fgj22.App.Components
             {
                 var spell = Editor.Spells.Dequeue();
 
-                if(spell is Fireball)
+                if(spell is Fireball fb)
                 {
                     var entity = Entity.Scene.CreateEntity("fireball", Entity.Transform.Position);
-                    entity.AddComponent(new Emp(new Vector2(200, 0)));
+                    entity.AddComponent(new Emp(-fb.Angle * Math.PI / 180));
                 }
             }
         }

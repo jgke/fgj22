@@ -10,11 +10,12 @@ namespace Fgj22.App.Components
 {
     public class Emp : Component
     {
-        private Vector2 velocity2;
+        private Vector2 Velocity;
 
-        public Emp(Vector2 velocity)
+        public Emp(double angle)
         {
-            this.velocity2 = velocity;
+            var velocity = 100;
+            this.Velocity = new Vector2((float)(Math.Cos(angle) * velocity), (float)(Math.Sin(angle) * velocity));
         }
 
         public override void OnAddedToEntity()
@@ -29,7 +30,7 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new BoxCollider(30, 30));
             Entity.AddComponent(new Health(1000));
 
-            this.AddComponent(new Velocity(velocity2));
+            this.AddComponent(new Velocity(Velocity));
         }
     }
 }
