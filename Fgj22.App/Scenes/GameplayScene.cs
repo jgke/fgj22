@@ -6,11 +6,19 @@ using Nez.Tiled;
 using Nez.Textures;
 using Fgj22.App.Systems;
 using Fgj22.App.Utility;
+using System;
 
 namespace Fgj22.App
 {
     public class GameplayScene : ProgramScene
     {
+        float CompletedTimer = 2;
+
+        public GameplayScene()
+        {
+
+        }
+
         public override void Initialize()
         {
             base.Initialize();
@@ -51,6 +59,23 @@ namespace Fgj22.App
             tiledEntity.AddComponent(cameraBounds);
 
             AddSceneComponent(new PathFinder(map));
+        }
+
+        public override void Update()
+        {
+            base.Update();
+
+            var enemy = this.FindComponentOfType<Enemy>();
+
+            if(enemy == null)
+            {
+                CompletedTimer -= Time.DeltaTime;
+
+            }
+            if (CompletedTimer < 0)
+            {
+                throw new Exception("Level completed");
+            }
         }
     }
 }
