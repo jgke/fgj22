@@ -28,6 +28,7 @@ namespace Fgj22.App.Components
         private VirtualButton MeleeButton;
         private int MeleeTime = 0;
         Vector2 velocity;
+
         private TmxMap Map;
 
         private List<Vector2> MovementPath;
@@ -126,6 +127,9 @@ namespace Fgj22.App.Components
 
             if (velocity != Vector2.Zero)
             {
+
+                float rotation = 180 - velocity.Angle2(new Vector2(0,1));
+                Entity.Transform.Rotation = rotation * Mathf.Deg2Rad ;
                 animation = "Run";
             }
 
