@@ -9,16 +9,11 @@ using Fgj22.App.Utility;
 
 namespace Fgj22.App
 {
-    public class BasicScene : SampleScene
+    public class GameplayScene : ProgramScene
     {
         public override void Initialize()
         {
             base.Initialize();
-
-            // Set the playing area size
-            SetDesignResolution(480, 320, SceneResolutionPolicy.ShowAllPixelPerfect);
-            // Set the rendering resolution
-            Screen.SetSize(1440, 1280);
 
             var map = Content.LoadTiledMap("Content/tiledMap.tmx");
 			var topLeft = new Vector2(0, 0);
