@@ -13,7 +13,7 @@ namespace Fgj22.App
             base.Initialize();
 
             Window.AllowUserResizing = true;
-            Scene = new GameplayScene();
+            Scene = new MenuScene();
             DebugRenderEnabled = true;
         }
     }

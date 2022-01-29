@@ -43,6 +43,9 @@
     <None Update="Content\Lone Von Neumann.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\nez\effects\transitions\Wind.mgfxo">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Sigrithr.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
