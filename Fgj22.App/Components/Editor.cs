@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Fgj22.App.Utility;
+using Fgj22.Spells;
+using Fgj22.Spells.Spell;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,9 +22,12 @@ namespace Fgj22.App.Components
 
         private readonly List<(KeyboardKey key, string text)> TextInput = new List<(KeyboardKey key, string text)>();
         private KeyboardKey Backspace;
+        private KeyboardKey Execute;
 
         private string Content = "";
         private ScreenPosition Position;
+
+        public Queue<SpellBase> Spells = new Queue<SpellBase>();
 
         public Editor(ScreenPosition position)
         {
@@ -36,10 +41,27 @@ namespace Fgj22.App.Components
             for(int i = (int)Keys.A; i <= (int)Keys.Z; i ++)
             {
                 var key = (Keys)i;
-                TextInput.Add((new VirtualButton.KeyboardKey(key), key.ToString().ToLower()));
+                TextInput.Add((new KeyboardKey(key), key.ToString().ToUpper()));
             }
 
+            var dPrefix = (int)Keys.D0;
+            for (int i = 0; i <= (int)Keys.D9 - dPrefix; i++)
+            {
+                var key = (Keys)(i + dPrefix);
+                TextInput.Add((new KeyboardKey(key), i.ToString()));
+            }
+
+            var numPadPrefix = (int)Keys.NumPad0;
+            for (int i = 0; i <= (int)Keys.NumPad9 - numPadPrefix; i++)
+            {
+                var key = (Keys)(i + numPadPrefix);
+                TextInput.Add((new KeyboardKey(key), i.ToString()));
+            }
+
+            TextInput.Add((new KeyboardKey(Keys.Space), " "));
+
             Backspace = new KeyboardKey(Keys.Back);
+            Execute = new KeyboardKey(Keys.Enter);
         }
 
         public override void OnAddedToEntity()
@@ -74,9 +96,22 @@ namespace Fgj22.App.Components
             {
                 Content += pressedButton.text;
             }
-            else if(Backspace.IsPressed)
+            else if(Backspace.IsPressed && Content.Length > 0)
             {
-                Content = Content.Substring(0, Content.Length - 1);
+                Content = Content[0..^1];
+            }
+            else if (Execute.IsPressed)
+            {
+                var spell = SpellParser.ParseInput(Content);
+                
+
+                if(spell != null)
+                {
+                    Spells.Enqueue(spell);
+                    Content = "";
+
+                    SetVisibility(false);
+                }
             }
 
             Text.Text = Content;

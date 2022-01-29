@@ -11,6 +11,8 @@ using Fgj22.App.Systems;
 using static Nez.Tiled.TiledMapMover;
 using Nez.Tweens;
 using Serilog;
+using System.Linq;
+using Fgj22.Spells.Spell;
 
 namespace Fgj22.App.Components
 {
@@ -23,7 +25,6 @@ namespace Fgj22.App.Components
         [Loggable]
         private CollisionState CollisionState = new CollisionState();
 
-        private bool EditorVisible = false;
         private Editor Editor;
         private VirtualButton OpenEditor;
 
@@ -157,17 +158,18 @@ namespace Fgj22.App.Components
         {
             if(OpenEditor.IsPressed)
             {
-                EditorVisible = !EditorVisible;
-                Editor.SetVisibility(EditorVisible);
+                Editor.SetVisibility(!Editor.Enabled);
             }
 
-            if (!EditorVisible)
+            if (!Editor.Enabled)
             {
                 UpdateMovementPath();
                 MeleeAttackActive = MeleeButton.IsDown;
             }
 
-            if(MovementPathPos != -1) {
+            UpdateSpells();
+
+            if (MovementPathPos != -1) {
                 var direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
                 if (direction.Length() < 5) {
                     MovementPathPos += 1;
@@ -203,6 +205,20 @@ namespace Fgj22.App.Components
                 else
                 {
                     MovementPathPos = -1;
+                }
+            }
+        }
+
+        private void UpdateSpells()
+        {
+            if(Editor.Spells.Any())
+            {
+                var spell = Editor.Spells.Dequeue();
+
+                if(spell is Fireball)
+                {
+                    var entity = Entity.Scene.CreateEntity("fireball", Entity.Transform.Position);
+                    entity.AddComponent(new Emp(new Vector2(200, 0)));
                 }
             }
         }

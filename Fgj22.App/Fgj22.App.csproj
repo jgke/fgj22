@@ -30,10 +30,14 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Fgj22.Spells\Fgj22.Spells.csproj" />
     <ProjectReference Include="..\Nez\Nez.Portable\Nez.MG38.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Content\caveman.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\fireball.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Content\Lone Von Neumann.png">

@@ -11,11 +11,11 @@ namespace Fgj22.Spells.Spell
     {
         public int Angle { get; set; }
 
-        public static Regex Pattern { get; } = new Regex(@"FB\([1-9]([0-9])*\)");
+        public static Regex Pattern { get; } = new Regex(@"FB [1-9]([0-9])*");
 
         public static Fireball Create(string input)
         {
-            var value = input.Substring(3).TrimEnd(')');
+            var value = input.Substring(2);
 
             return new Fireball
             {

@@ -10,7 +10,7 @@ namespace Fgj22.Tests
         [Fact]
         public void TestParser_GeneratesFireball()
         {
-            var spell = SpellParser.ParseInput("FB(1)");
+            var spell = SpellParser.ParseInput("FB 1");
             Assert.NotNull(spell);
             Assert.True(spell is Fireball fb && fb.Angle == 1);
         }
@@ -18,7 +18,7 @@ namespace Fgj22.Tests
         [Fact]
         public void TestParser_GeneratesFireball2()
         {
-            var spell = SpellParser.ParseInput("FB(10)");
+            var spell = SpellParser.ParseInput("FB 10");
             Assert.NotNull(spell);
             Assert.True(spell is Fireball fb && fb.Angle == 10);
         }
@@ -26,7 +26,7 @@ namespace Fgj22.Tests
         [Fact]
         public void TestTestParser_ReturnsNull()
         {
-            var spell = SpellParser.ParseInput("FB(A)");
+            var spell = SpellParser.ParseInput("FB A");
             Assert.Null(spell);
         }
     }
