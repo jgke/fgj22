@@ -29,8 +29,11 @@ namespace Fgj22.App.Components
 
         private VirtualIntegerAxis XAxisInput;
         private VirtualIntegerAxis YAxisInput;
+
         private VirtualButton MeleeButton;
         private int MeleeTime = 0;
+        public bool MeleeAttackActive = true;
+
         Vector2 velocity;
 
         private TmxMap Map;
@@ -38,8 +41,9 @@ namespace Fgj22.App.Components
         private List<Vector2> MovementPath;
         private int MovementPathPos = -1;
 
-        public Test(TmxMap Map) {
+        public Test(TmxMap Map, Editor editor) {
             this.Map = Map;
+            Editor = editor;
         }
 
         public override void OnAddedToEntity()
@@ -52,13 +56,9 @@ namespace Fgj22.App.Components
             Entity.AddComponent(Mover);
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             BoxCollider = Entity.GetComponent<BoxCollider>();
-            Editor = new Editor();
 
             Entity.AddComponent(new Health(5));
             Entity.AddComponent(new Team(1));
-
-            Editor.Enabled = false;
-            Entity.AddComponent(Editor);
 
             int r = 8;
             Animator.AddAnimation("Idle", new[]
@@ -126,7 +126,7 @@ namespace Fgj22.App.Components
                 return;
             }
 
-            if (MeleeButton.IsDown && MeleeTime == 0)
+            if (MeleeAttackActive && MeleeTime == 0)
             {
                 Animator.Play("Melee", SpriteAnimator.LoopMode.ClampForever);
                 float duration = Animator.CurrentAnimation.Sprites.Length / (Animator.CurrentAnimation.FrameRate * Animator.Speed);
@@ -164,6 +164,7 @@ namespace Fgj22.App.Components
             if (!EditorVisible)
             {
                 UpdateMovementPath();
+                MeleeAttackActive = MeleeButton.IsDown;
             }
 
             if(MovementPathPos != -1) {
@@ -204,11 +205,6 @@ namespace Fgj22.App.Components
                     MovementPathPos = -1;
                 }
             }
-        }
-
-        private void UpdateEditor()
-        {
-
         }
 
         public override void DebugRender(Batcher batcher) {

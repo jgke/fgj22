@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Fgj22.App.Utility;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nez;
 using Nez.Sprites;
 using Nez.Textures;
+using static Nez.VirtualButton;
 
 namespace Fgj22.App.Components
 {
@@ -15,20 +18,28 @@ namespace Fgj22.App.Components
         private SpriteRenderer EditorRenderer;
         private TextComponent Text;
 
-        private VirtualButton InputQ;
+        private readonly List<(KeyboardKey key, string text)> TextInput = new List<(KeyboardKey key, string text)>();
+        private KeyboardKey Backspace;
 
-        private string Content = "Asdasd";
+        private string Content = "";
+        private ScreenPosition Position;
 
-
-        public Editor()
+        public Editor(ScreenPosition position)
         {
+            Position = position;
             SetupInput();
+
         }
 
         void SetupInput()
         {
-            InputQ = new VirtualButton();
-            InputQ.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Q));
+            for(int i = (int)Keys.A; i <= (int)Keys.Z; i ++)
+            {
+                var key = (Keys)i;
+                TextInput.Add((new VirtualButton.KeyboardKey(key), key.ToString().ToLower()));
+            }
+
+            Backspace = new KeyboardKey(Keys.Back);
         }
 
         public override void OnAddedToEntity()
@@ -37,7 +48,7 @@ namespace Fgj22.App.Components
             var texture = Entity.Scene.Content.LoadTexture("Content/editor.png");
 
             EditorRenderer = new SpriteRenderer(texture);
-            Text = new TextComponent(Graphics.Instance.BitmapFont, Content, new Vector2(2, 2), Color.White);
+            Text = new TextComponent(Graphics.Instance.BitmapFont, Content, new Vector2(-80, -40), Color.White);
 
             Entity.AddComponent(EditorRenderer);
             Entity.AddComponent(Text);
@@ -56,9 +67,16 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-            if (InputQ.IsPressed)
+            this.Entity.SetPosition(Position.GetPositionOnScreen(new Vector2(-100, -100)));
+
+            var pressedButton = TextInput.FirstOrDefault(b => b.key.IsPressed);
+            if (pressedButton != default)
             {
-                Content += "Q";
+                Content += pressedButton.text;
+            }
+            else if(Backspace.IsPressed)
+            {
+                Content = Content.Substring(0, Content.Length - 1);
             }
 
             Text.Text = Content;

@@ -5,6 +5,7 @@ using Fgj22.App.Components;
 using Nez.Tiled;
 using Nez.Textures;
 using Fgj22.App.Systems;
+using Fgj22.App.Utility;
 
 namespace Fgj22.App
 {
@@ -20,14 +21,26 @@ namespace Fgj22.App
             Screen.SetSize(1440, 1280);
 
             var map = Content.LoadTiledMap("Content/tiledMap.tmx");
+			var topLeft = new Vector2(0, 0);
+			var bottomRight = new Vector2(map.TileWidth * map.Width, map.TileWidth * map.Height);
+            var tiledEntity = CreateEntity("tiled-map-entity");
+            tiledEntity.AddComponent(new TiledMapRenderer(map, "main"));
+
+            var cameraBounds = new CameraBounds(topLeft, bottomRight);
+
+            var screenPosition = new ScreenPosition(cameraBounds);
+
+            var editor = CreateEntity("editor");
+            var editorComponent = new Editor(screenPosition);
+            editor.AddComponent(editorComponent);
+
             var collisionLayer = map.GetLayer<TmxLayer>("main");
 			var playerSpawn = map.GetObjectGroup("objects").Objects["spawn"];
 			var playerSpawnPosition = new Vector2(playerSpawn.X, playerSpawn.Y);
             var playerEntity = CreateEntity("player", playerSpawnPosition);
-            playerEntity.AddComponent(new Test(map));
+            playerEntity.AddComponent(new Test(map, editorComponent));
 
-            var tiledEntity = CreateEntity("tiled-map-entity");
-            tiledEntity.AddComponent(new TiledMapRenderer(map, "main"));
+
 
 			var enemySpawns = map.GetObjectGroup("enemies").Objects;
 			foreach (TmxObject itemSpawnPoint in enemySpawns)
@@ -37,10 +50,8 @@ namespace Fgj22.App
 			}
 
             Camera.Entity.AddComponent(new FollowCamera(playerEntity));
-			var topLeft = new Vector2(0, 0);
-			var bottomRight = new Vector2(map.TileWidth * map.Width, map.TileWidth * map.Height);
-			tiledEntity.AddComponent(new CameraBounds(topLeft, bottomRight));
-            tiledEntity.AddComponent(new CameraBounds(topLeft, bottomRight));
+			tiledEntity.AddComponent(cameraBounds);
+            tiledEntity.AddComponent(cameraBounds);
 
             AddSceneComponent(new PathFinder(map));
         }
