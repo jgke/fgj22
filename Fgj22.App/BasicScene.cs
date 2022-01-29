@@ -19,9 +19,6 @@ namespace Fgj22.App
             // Set the rendering resolution
             Screen.SetSize(1440, 1280);
 
-            var editor = CreateEntity("editor", new Vector2(300, 100));
-            editor.AddComponent(new Editor());
-
             var map = Content.LoadTiledMap("Content/tiledMap.tmx");
             var collisionLayer = map.GetLayer<TmxLayer>("main");
 			var playerSpawn = map.GetObjectGroup("objects").Objects["spawn"];

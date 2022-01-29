@@ -23,6 +23,10 @@ namespace Fgj22.App.Components
         [Loggable]
         private CollisionState CollisionState = new CollisionState();
 
+        private bool EditorVisible = false;
+        private Editor Editor;
+        private VirtualButton OpenEditor;
+
         private VirtualIntegerAxis XAxisInput;
         private VirtualIntegerAxis YAxisInput;
         private VirtualButton MeleeButton;
@@ -48,8 +52,13 @@ namespace Fgj22.App.Components
             Entity.AddComponent(Mover);
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             BoxCollider = Entity.GetComponent<BoxCollider>();
+            Editor = new Editor();
+
             Entity.AddComponent(new Health(5));
             Entity.AddComponent(new Team(1));
+
+            Editor.Enabled = false;
+            Entity.AddComponent(Editor);
 
             int r = 8;
             Animator.AddAnimation("Idle", new[]
@@ -104,6 +113,10 @@ namespace Fgj22.App.Components
             MeleeButton = new VirtualButton();
             MeleeButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
             MeleeButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
+
+            //Editor
+            OpenEditor = new VirtualButton();
+            OpenEditor.Nodes.Add(new VirtualButton.KeyboardKey(Keys.LeftControl));
         }
 
         public void UpdateAnimation()
@@ -142,16 +155,15 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-			if (Input.LeftMouseButtonPressed) {
-				var start = Entity.Transform.Position;
-				var end = Entity.Scene.Camera.MouseToWorldPoint();
+            if(OpenEditor.IsPressed)
+            {
+                EditorVisible = !EditorVisible;
+                Editor.SetVisibility(EditorVisible);
+            }
 
-                MovementPath = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(start, end);
-                if(MovementPath != null) {
-                    MovementPathPos = 0;
-                } else {
-                    MovementPathPos = -1;
-                }
+            if (!EditorVisible)
+            {
+                UpdateMovementPath();
             }
 
             if(MovementPathPos != -1) {
@@ -173,6 +185,30 @@ namespace Fgj22.App.Components
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
             UpdateAnimation();
+        }
+
+        private void UpdateMovementPath()
+        {
+            if (Input.LeftMouseButtonPressed)
+            {
+                var start = Entity.Transform.Position;
+                var end = Entity.Scene.Camera.MouseToWorldPoint();
+
+                MovementPath = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(start, end);
+                if (MovementPath != null)
+                {
+                    MovementPathPos = 0;
+                }
+                else
+                {
+                    MovementPathPos = -1;
+                }
+            }
+        }
+
+        private void UpdateEditor()
+        {
+
         }
 
         public override void DebugRender(Batcher batcher) {
