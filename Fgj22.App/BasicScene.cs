@@ -7,7 +7,6 @@ using Nez.Textures;
 
 namespace Fgj22.App
 {
-    [SampleScene("Basic Scene", 9999, "Scene with a single Entity. The minimum to have something to show")]
     public class BasicScene : SampleScene
     {
         public override void Initialize()
