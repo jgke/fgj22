@@ -228,6 +228,5 @@ namespace Fgj22.App.Components
             var mouseLocation = Entity.Scene.Camera.MouseToWorldPoint();
             batcher.DrawPixel(mouseLocation.X, mouseLocation.Y, Debug.Colors.DebugText, 3);
         }
-
     }
 }
