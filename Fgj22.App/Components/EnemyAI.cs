@@ -52,7 +52,7 @@ namespace Fgj22.App.Components
 
             Vector2 velocity;
             Vector2 direction;
-            if (MovementPath.Any())
+            if (MovementPath != null && MovementPath.Any())
             {
                 direction = MovementPath.Peek() - Entity.Transform.Position;
                 if (direction.Length() < 10)
@@ -74,8 +74,9 @@ namespace Fgj22.App.Components
 
             Mover.Move(velocity, Parent.BoxCollider, Parent.CollisionState);
 
-
             Transform.Rotation = direction.GetAngle();
+
+            FrequencyCounter += 1;
         }
 
         
