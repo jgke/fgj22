@@ -133,6 +133,8 @@ namespace Fgj22.App.Components
                 MovementPath = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(start, end);
                 if(MovementPath != null) {
                     MovementPathPos = 0;
+                } else {
+                    MovementPathPos = -1;
                 }
             }
 
