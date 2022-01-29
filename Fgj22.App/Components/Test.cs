@@ -27,6 +27,7 @@ namespace Fgj22.App.Components
         private VirtualIntegerAxis YAxisInput;
         private VirtualButton MeleeButton;
         private int MeleeTime = 0;
+        Vector2 velocity;
         private TmxMap Map;
 
         private List<Vector2> MovementPath;
@@ -50,6 +51,10 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Team(1));
 
             int r = 8;
+            Animator.AddAnimation("Idle", new[]
+            {
+                sprites[0*r + 0]
+            });
             Animator.AddAnimation("Run", new[]
             {
                 sprites[0*r + 0],
@@ -117,7 +122,14 @@ namespace Fgj22.App.Components
                 return;
             }
 
-            string animation = "Run";
+            string animation = "Idle";
+
+            if (velocity != Vector2.Zero)
+            {
+                animation = "Run";
+            }
+
+            
             if (animation != null && !Animator.IsAnimationActive(animation))
             {
                 Animator.Play(animation);
@@ -137,8 +149,6 @@ namespace Fgj22.App.Components
                     MovementPathPos = -1;
                 }
             }
-
-            Vector2 velocity;
 
             if(MovementPathPos != -1) {
                 var direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
