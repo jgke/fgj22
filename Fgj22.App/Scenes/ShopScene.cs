@@ -20,6 +20,14 @@ namespace Fgj22.App
             var table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
+            var speedButton = new TextButton("Double speed", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            table.Add(speedButton).SetMinWidth(100).SetMinHeight(30);
+            table.Row();
+            speedButton.OnClicked += _ =>
+            {
+                GameState.Instance.PlayerSpeed *= 2;
+            };
+
             var button1 = new TextButton("Continue game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button1).SetMinWidth(100).SetMinHeight(30);
             table.Row();

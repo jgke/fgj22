@@ -198,13 +198,13 @@ namespace Fgj22.App.Components
                     }
                 }
                 direction.Normalize();
-                velocity = direction * 150;
+                velocity = direction * GameState.Instance.PlayerSpeed;
             }
             else
             {
                 MovementPath = new List<Vector2>();
                 MovementPathPos = -1;
-                velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
+                velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * GameState.Instance.PlayerSpeed;
             }
 
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
