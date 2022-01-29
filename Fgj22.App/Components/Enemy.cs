@@ -90,7 +90,7 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Damage(collisionDamage, false));
             Entity.AddComponent(BoxCollider);
             Entity.AddComponent(new Team(Faction.Enemy, true));
-            Entity.AddComponent(new EnemyAI(Player, Map, this));
+            Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
 
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
