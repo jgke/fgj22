@@ -14,11 +14,6 @@ namespace Fgj22.App
     {
         float CompletedTimer = 2;
 
-        public GameplayScene()
-        {
-
-        }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -48,8 +43,6 @@ namespace Fgj22.App
             var player = new Test(map, editorComponent);
             playerEntity.AddComponent(player);
 
-
-
             var enemySpawns = map.GetObjectGroup("enemies").Objects;
             foreach (TmxObject itemSpawnPoint in enemySpawns)
             {
@@ -73,11 +66,11 @@ namespace Fgj22.App
             if (enemy == null)
             {
                 CompletedTimer -= Time.DeltaTime;
-
             }
             if (CompletedTimer < 0)
             {
-                throw new Exception("Level completed");
+                CompletedTimer = 999999;
+                Core.StartSceneTransition(new WindTransition(() => new ShopScene()));
             }
         }
     }

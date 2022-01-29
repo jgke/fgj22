@@ -58,16 +58,10 @@ namespace Fgj22.App
 
     class StoryComponent : Component, IUpdatable
     {
-        int SceneNumber;
         int storyLine = 0;
         Story story;
         Table table;
         private VirtualButton StoryAdvanceButton;
-
-        public StoryComponent(int sceneNumber)
-        {
-            this.SceneNumber = sceneNumber;
-        }
 
         public override void OnAddedToEntity()
         {
@@ -75,7 +69,8 @@ namespace Fgj22.App
             StoryAdvanceButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
             StoryAdvanceButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
 
-            switch (SceneNumber)
+            Log.Information("Loading story {A}", GameState.Instance);
+            switch (GameState.Instance.LevelNum)
             {
                 case 0:
                     story = new StoryBuilder()
@@ -85,7 +80,9 @@ namespace Fgj22.App
                     break;
 
                 default:
-                    story = new StoryBuilder().Build();
+                    story = new StoryBuilder()
+                        .Line("Content/SigrithrAvatar.png", "moi")
+                        .Build();
                     break;
             }
 
@@ -105,17 +102,9 @@ namespace Fgj22.App
 
         public void CycleStory()
         {
-            Log.Information("Cycle {A} {B}", storyLine, story.Content);
             if (storyLine >= story.Content.Count)
             {
-                try
-                {
-                    Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
-                }
-                catch (Exception e)
-                {
-                    Log.Information("{e}", e);
-                }
+                Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
             }
             else
             {
@@ -146,17 +135,12 @@ namespace Fgj22.App
 
     public class StoryScene : ProgramScene
     {
-        int SceneNumber;
-        public StoryScene(int sceneNumber)
-        {
-            SceneNumber = sceneNumber;
-        }
         public override void Initialize()
         {
             base.Initialize();
 
             var menuEntity = CreateEntity("menu", new Vector2(0, 0));
-            menuEntity.AddComponent(new StoryComponent(SceneNumber));
+            menuEntity.AddComponent(new StoryComponent());
         }
     }
 }

@@ -20,19 +20,13 @@ namespace Fgj22.App
             var table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
-            var button1 = new TextButton("Start game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            var button1 = new TextButton("Continue game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button1).SetMinWidth(100).SetMinHeight(30);
             table.Row();
             button1.OnClicked += _ =>
             {
-                Core.StartSceneTransition(new WindTransition(() => new StoryScene(0)));
-            };
-            var button2 = new TextButton("Quit game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-            table.Add(button2).SetMinWidth(100).SetMinHeight(30);
-            table.Row();
-            button2.OnClicked += _ =>
-            {
-                Core.Exit();
+                GameState.Instance.LevelNum += 1;
+                Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
             };
         }
     }
