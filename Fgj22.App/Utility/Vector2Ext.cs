@@ -35,5 +35,32 @@ namespace Fgj22.App {
 
             return best;
         }
+
+        public static float GetAngle(this Vector2 direction)
+        {
+            if (direction.X != 0)
+            {
+                var rotation = (float)Math.Atan(direction.Y / direction.X);
+                if (direction.X < 0)
+                {
+                    return rotation + (float)Math.PI;
+                }
+                else
+                {
+                    return rotation;
+                }
+            }
+            else
+            {
+                if (direction.Y < 0)
+                {
+                    return (float)Math.PI / 2.0f;
+                }
+                else
+                {
+                    return (float)Math.PI / 2.0f * 3.0f;
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Fgj22.App;
 
 namespace Fgj22.App.Components
 {
@@ -73,22 +74,8 @@ namespace Fgj22.App.Components
 
             Mover.Move(velocity, Parent.BoxCollider, Parent.CollisionState);
 
-            if (direction.X != 0)
-            {
-                Transform.Rotation = (float)Math.Tanh(direction.Y / direction.X);
-            }
-            else
-            {
-                if(direction.Y < 0)
-                {
-                    Transform.Rotation = (float)Math.PI / 2.0f;
-                }
-                else
-                {
-                    Transform.Rotation = (float)Math.PI / 2.0f * 3.0f;
-                }
-            }
 
+            Transform.Rotation = direction.GetAngle();
         }
 
         

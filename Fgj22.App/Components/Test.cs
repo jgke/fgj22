@@ -33,7 +33,6 @@ namespace Fgj22.App.Components
         private VirtualIntegerAxis YAxisInput;
 
         private VirtualButton MeleeButton;
-        private int MeleeTime = 0;
         public bool MeleeAttackActive = true;
         public double MeleeAttackDirection = 0;
 
@@ -129,7 +128,7 @@ namespace Fgj22.App.Components
                 return;
             }
 
-            if (MeleeAttackActive && MeleeTime == 0)
+            if (MeleeAttackActive)
             {
                 Animator.Play("Melee", SpriteAnimator.LoopMode.ClampForever);
                 float duration = Animator.CurrentAnimation.Sprites.Length / (Animator.CurrentAnimation.FrameRate * Animator.Speed);
@@ -145,7 +144,7 @@ namespace Fgj22.App.Components
             {
 
                 float rotation = 180 - velocity.Angle2(new Vector2(0,1));
-                Entity.Transform.Rotation = rotation * Mathf.Deg2Rad ;
+                //Entity.Transform.Rotation = rotation * Mathf.Deg2Rad ;
                 animation = "Run";
             }
 
@@ -166,9 +165,15 @@ namespace Fgj22.App.Components
             if (!Editor.Enabled)
             {
                 UpdateMovementPath();
-                MeleeAttackActive = MeleeButton.IsPressed;
 
-                if(MeleeAttackActive)
+                if (Animator.CurrentAnimationName != "Melee")
+                {
+                    UpdateFacingRotation();
+                }
+
+                MeleeAttackActive = MeleeButton.IsPressed || Input.LeftMouseButtonPressed;
+
+                if (MeleeAttackActive)
                 {
                     UpdateMeleeAttack();
                 }
@@ -194,6 +199,10 @@ namespace Fgj22.App.Components
 
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
+            if (Animator.CurrentAnimationName != "Melee" && !Editor.Enabled)
+            {
+                Transform.Rotation = Transform.Rotation + (float)Math.PI / 2.0f;
+            }
             UpdateAnimation();
         }
 
@@ -208,7 +217,7 @@ namespace Fgj22.App.Components
 
         private void UpdateMovementPath()
         {
-            if (Input.LeftMouseButtonPressed)
+            if (Input.RightMouseButtonPressed)
             {
                 var start = Entity.Transform.Position;
                 var end = Entity.Scene.Camera.MouseToWorldPoint();
@@ -223,6 +232,14 @@ namespace Fgj22.App.Components
                     MovementPathPos = -1;
                 }
             }
+        }
+
+        private void UpdateFacingRotation()
+        {
+            var start = Entity.Transform.Position;
+            var end = Entity.Scene.Camera.MouseToWorldPoint();
+
+            Transform.Rotation = (end - start).GetAngle();
         }
 
         private void UpdateSpells()
