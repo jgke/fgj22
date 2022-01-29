@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using static Nez.Tiled.TiledMapMover;
+using Nez.Tweens;
 
 namespace Fgj22.App.Components
 {
@@ -17,11 +18,13 @@ namespace Fgj22.App.Components
         private TiledMapMover Mover;
         [Loggable]
         private BoxCollider BoxCollider;
-
-        VirtualIntegerAxis _xAxisInput;
-        VirtualIntegerAxis _yAxisInput;
         [Loggable]
         private CollisionState CollisionState = new CollisionState();
+
+        private VirtualIntegerAxis XAxisInput;
+        private VirtualIntegerAxis YAxisInput;
+        private VirtualButton MeleeButton;
+        private int MeleeTime = 0;
 
         public override void OnAddedToEntity()
         {
@@ -33,16 +36,25 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Health(5));
             Entity.AddComponent(new Team(1));
 
+            int r = 8;
             Animator.AddAnimation("Run", new[]
             {
-                sprites[0],
-                sprites[1],
-                sprites[2],
-                sprites[3],
-                sprites[4],
-                sprites[5],
-                sprites[6],
-                sprites[7],
+                sprites[0*r + 0],
+                sprites[0*r + 1],
+                sprites[0*r + 2],
+                sprites[0*r + 3],
+                sprites[0*r + 4],
+                sprites[0*r + 5],
+                sprites[0*r + 6],
+                sprites[0*r + 7],
+            });
+            Animator.AddAnimation("Melee", new[]
+            {
+                sprites[1 * r + 0],
+                sprites[1 * r + 1],
+                sprites[1 * r + 2],
+                sprites[1 * r + 3],
+                sprites[1 * r + 4],
             });
 
             SetupInput();
@@ -50,38 +62,62 @@ namespace Fgj22.App.Components
 
         public override void OnRemovedFromEntity()
         {
-            _xAxisInput.Deregister();
-            _yAxisInput.Deregister();
+            XAxisInput.Deregister();
+            YAxisInput.Deregister();
+            MeleeButton.Deregister();
         }
 
         void SetupInput()
         {
             // horizontal input from dpad, left stick or keyboard left/right
-            _xAxisInput = new VirtualIntegerAxis();
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
-            _xAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
-            _xAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
+            XAxisInput = new VirtualIntegerAxis();
+            XAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
+            XAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
+            XAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
 
             // vertical input from dpad, left stick or keyboard up/down
-            _yAxisInput = new VirtualIntegerAxis();
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
-            _yAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
-            _yAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+            YAxisInput = new VirtualIntegerAxis();
+            YAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
+            YAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
+            YAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
 
+            // Melee. A on the keyboard or A on the gamepad
+            MeleeButton = new VirtualButton();
+            MeleeButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
+            MeleeButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
         }
 
-        public void Update()
+        public void UpdateAnimation()
         {
-            var velocity = new Vector2(_xAxisInput.Value, _yAxisInput.Value) * 150;
+            if (Animator.IsAnimationActive("Melee") && Animator.IsRunning)
+            {
+                return;
+            }
 
-            Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
+            if (MeleeButton.IsDown && MeleeTime == 0)
+            {
+                Animator.Play("Melee", SpriteAnimator.LoopMode.ClampForever);
+                float duration = Animator.CurrentAnimation.Sprites.Length / (Animator.CurrentAnimation.FrameRate * Animator.Speed);
+                Entity.TweenRotationDegreesTo(-45, duration)
+                    .SetLoops(LoopType.PingPong, 1)
+                    .Start();
+                return;
+            }
 
-            var animation = "Run";
-
+            string animation = "Run";
             if (animation != null && !Animator.IsAnimationActive(animation))
             {
                 Animator.Play(animation);
             }
+        }
+
+        public void Update()
+        {
+            var velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
+
+            Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
+
+            UpdateAnimation();
         }
     }
 }
