@@ -70,6 +70,7 @@ namespace Triton.Audio.Decoders
                     result.Add((byte)(temp >> 8));
                 }
             }
+            stream.Dispose();
             //this.Channels = (ushort)vorbis.Channels;
             //this.SamplesPerSecond = (uint)vorbis.SampleRate;
             //this.Data = result.ToArray();
