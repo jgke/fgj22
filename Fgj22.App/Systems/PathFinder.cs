@@ -29,8 +29,10 @@ namespace Fgj22.App.Systems {
             var path = AstarGraph.Search(start, end);
             Log.Information("Final route: {path}", path);
             if (path != null) {
-                return path
-                    .Select(pos => Map.TileToWorldPosition(pos) + new Vector2(Map.TileWidth, Map.TileHeight)/2).ToList();
+                var convertedPath = 
+                    path.Select(pos => Map.TileToWorldPosition(pos) + new Vector2(Map.TileWidth, Map.TileHeight)/2).ToList();
+                Log.Information("Final route in world coordinates: {path}", convertedPath);
+                return convertedPath;
             } else {
                 return null;
             }

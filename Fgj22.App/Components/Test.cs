@@ -128,7 +128,7 @@ namespace Fgj22.App.Components
         {
 			if (Input.LeftMouseButtonPressed) {
 				var start = Entity.Transform.Position;
-				var end = Input.MousePosition;
+				var end = Entity.Scene.Camera.MouseToWorldPoint();
 
                 MovementPath = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(start, end);
                 if(MovementPath != null) {
@@ -160,5 +160,12 @@ namespace Fgj22.App.Components
 
             UpdateAnimation();
         }
+
+        public override void DebugRender(Batcher batcher) {
+            base.DebugRender(batcher);
+            var mouseLocation = Entity.Scene.Camera.MouseToWorldPoint();
+            batcher.DrawPixel(mouseLocation.X, mouseLocation.Y, Debug.Colors.DebugText, 3);
+        }
+
     }
 }
