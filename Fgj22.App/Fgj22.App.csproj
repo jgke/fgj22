@@ -49,6 +49,12 @@
     <None Update="Content\Sigrithr.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\SigrithrAvatar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\VonNeumannAvatar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\editor.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
