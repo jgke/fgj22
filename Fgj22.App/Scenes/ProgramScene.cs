@@ -28,6 +28,7 @@ namespace Fgj22.App
         public override void Initialize()
         {
             base.Initialize();
+            ClearColor = Color.Aquamarine;
 
             // Set the playing area size
             SetDesignResolution(480, 320, SceneResolutionPolicy.ShowAllPixelPerfect);

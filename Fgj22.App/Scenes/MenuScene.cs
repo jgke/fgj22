@@ -27,6 +27,9 @@ namespace Fgj22.App
             var button2 = new TextButton("Quit game", TextButtonStyle.Create( Color.Black, Color.DarkGray, Color.Green ) );
             table.Add( button2 ).SetMinWidth( 100 ).SetMinHeight( 30 );
             table.Row();
+            button2.OnClicked += _ => {
+                Core.Exit();
+            };
         }
     }
 
