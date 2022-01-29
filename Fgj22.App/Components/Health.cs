@@ -4,7 +4,7 @@ using System;
 
 namespace Fgj22.App.Components
 {
-    public class Health : Component, ILoggable
+    public class Health : Component, IUpdatable, ILoggable
     {
         [Loggable]
         public int Maximum;
@@ -21,6 +21,14 @@ namespace Fgj22.App.Components
         {
             this.Current -= damage;
             return this.Current;
+        }
+
+        public void Update()
+        {
+            if (Current <= 0)
+            {
+                Entity.Destroy();
+            }
         }
     }
 }

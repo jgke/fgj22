@@ -18,12 +18,7 @@ namespace Fgj22.App.Components
             this.destroyOnHit = true;
         }
 
-        public override void OnAddedToEntity()
-        {
-            var collider = Entity.GetComponent<BoxCollider>();
-        }
-
-        void IUpdatable.Update()
+        public virtual void Update()
         {
             var neighborColliders = Physics.BoxcastBroadphaseExcludingSelf(Entity.GetComponent<Collider>());
 
@@ -42,11 +37,17 @@ namespace Fgj22.App.Components
             Console.WriteLine("Damage OnTriggerEnter");
             var myTeam = this.Entity.GetComponent<Team>().Faction;
             Team otherTeam = other.GetComponent<Team>();
+
+            if(otherTeam == null || !otherTeam.CanBeCollidedWith)
+            {
+                return;
+            }
+
             Health otherHealth = other.GetComponent<Health>();
 
             Log.Information("myTeam: {A}, other: {@B}, otherHealth: {@C}", myTeam, otherTeam, otherHealth);
 
-            if (otherTeam != null && otherHealth != null && myTeam != otherTeam.Faction)
+            if (otherHealth != null && myTeam != otherTeam.Faction)
             {
                 otherHealth.Hit(OnHit);
             }

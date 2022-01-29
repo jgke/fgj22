@@ -9,9 +9,12 @@ namespace Fgj22.App.Components
         [Loggable]
         public Faction Faction;
 
-        public Team(Faction team)
+        public bool CanBeCollidedWith;
+
+        public Team(Faction team, bool canBeCollidedWith)
         {
             this.Faction = team;
+            this.CanBeCollidedWith = canBeCollidedWith;
         }
     }
 }

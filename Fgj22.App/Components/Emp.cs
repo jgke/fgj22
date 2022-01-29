@@ -26,9 +26,10 @@ namespace Fgj22.App.Components
             var renderer = new SpriteRenderer(texture);
             Entity.AddComponent(renderer);
             Entity.AddComponent(new Damage(10, true));
-            Entity.AddComponent(new Team(Faction.Friendly));
+            Entity.AddComponent(new Team(Faction.Friendly, false));
             Entity.AddComponent(new BoxCollider(30, 30));
             Entity.AddComponent(new Health(1000));
+            Entity.AddComponent(new Lifetime(4));
 
             this.AddComponent(new Velocity(Velocity));
         }

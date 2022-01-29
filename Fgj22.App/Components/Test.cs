@@ -35,6 +35,7 @@ namespace Fgj22.App.Components
         private VirtualButton MeleeButton;
         private int MeleeTime = 0;
         public bool MeleeAttackActive = true;
+        public double MeleeAttackDirection = 0;
 
         Vector2 velocity;
 
@@ -60,7 +61,7 @@ namespace Fgj22.App.Components
             BoxCollider = Entity.GetComponent<BoxCollider>();
 
             Entity.AddComponent(new Health(5));
-            Entity.AddComponent(new Team(Faction.Friendly));
+            Entity.AddComponent(new Team(Faction.Friendly, true));
 
             int r = 8;
             Animator.AddAnimation("Idle", new[]
@@ -132,7 +133,7 @@ namespace Fgj22.App.Components
             {
                 Animator.Play("Melee", SpriteAnimator.LoopMode.ClampForever);
                 float duration = Animator.CurrentAnimation.Sprites.Length / (Animator.CurrentAnimation.FrameRate * Animator.Speed);
-                Entity.TweenRotationDegreesTo(-45, duration)
+                Entity.TweenRotationDegreesTo(-45 + Entity.RotationDegrees, duration)
                     .SetLoops(LoopType.PingPong, 1)
                     .Start();
                 return;
@@ -165,7 +166,12 @@ namespace Fgj22.App.Components
             if (!Editor.Enabled)
             {
                 UpdateMovementPath();
-                MeleeAttackActive = MeleeButton.IsDown;
+                MeleeAttackActive = MeleeButton.IsPressed;
+
+                if(MeleeAttackActive)
+                {
+                    UpdateMeleeAttack();
+                }
             }
 
             UpdateSpells();
@@ -189,6 +195,15 @@ namespace Fgj22.App.Components
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
             UpdateAnimation();
+        }
+
+        private void UpdateMeleeAttack()
+        {
+            var meleeAttack = Entity.Scene.CreateEntity("meleeAttack", Entity.Transform.Position + new Vector2(30, 30));
+
+            meleeAttack.AddComponent(new MeleeAttack(this, 10, 1, 30, -45));
+            meleeAttack.AddComponent(new BoxCollider(30, 30));
+            meleeAttack.AddComponent(new Team(Faction.Friendly, false));
         }
 
         private void UpdateMovementPath()

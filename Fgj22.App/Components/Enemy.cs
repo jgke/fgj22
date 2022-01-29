@@ -75,9 +75,9 @@ namespace Fgj22.App.Components
             }
 
             Entity.AddComponent(new Health(health));
-            Entity.AddComponent(new Damage(collisionDamage, true));
+            Entity.AddComponent(new Damage(collisionDamage, false));
             Entity.AddComponent(new BoxCollider(-8, -16, 16, 32));
-            Entity.AddComponent(new Team(Faction.Enemy));
+            Entity.AddComponent(new Team(Faction.Enemy, true));
 
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
