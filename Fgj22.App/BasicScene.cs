@@ -36,7 +36,7 @@ namespace Fgj22.App
 			foreach (TmxObject itemSpawnPoint in enemySpawns)
 			{
 				var enemy = CreateEntity("enemy", new Vector2(itemSpawnPoint.X, itemSpawnPoint.Y));
-                enemy.AddComponent(new Enemy("standard"));
+                enemy.AddComponent(new Enemy("Von Neumann Swarm"));
 			}
 
             Camera.Entity.AddComponent(new FollowCamera(playerEntity));

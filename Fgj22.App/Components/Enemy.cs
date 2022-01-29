@@ -21,13 +21,42 @@ namespace Fgj22.App.Components
             int health;
             int collisionDamage;
             string sprite;
+            Microsoft.Xna.Framework.Graphics.Texture2D texture;
+            System.Collections.Generic.List<Sprite> sprites;
+            Sprite[] stayAnimationFrames;
 
             switch (ty)
             {
-                case "standard":
-                    health = 5;
+                case "Lone Von Neumann":
+                    health = 2;
                     collisionDamage = 1;
-                    sprite = "Content/caveman.png";
+                    sprite = "Content/Lone Von Neumann.png";
+                    texture = Entity.Scene.Content.LoadTexture(sprite);
+                    sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+                    stayAnimationFrames = new[]
+                    {
+                        sprites[0 + 0],
+                        sprites[0 + 1],
+                        sprites[0 + 2],
+                        sprites[0 + 3],
+                        sprites[0 + 4]
+                    };
+                    break;
+
+                case "Von Neumann Swarm":
+                    health = 7;
+                    collisionDamage = 2;
+                    sprite = "Content/Von Neumann Swarm.png";
+                    texture = Entity.Scene.Content.LoadTexture(sprite);
+                    sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+                    stayAnimationFrames = new[]
+                    {
+                        sprites[0 + 0],
+                        sprites[0 + 1],
+                        sprites[0 + 2],
+                        sprites[0 + 3],
+                        sprites[0 + 4]
+                    };
                     break;
 
                 default:
@@ -35,6 +64,12 @@ namespace Fgj22.App.Components
                     health = 5;
                     collisionDamage = 1;
                     sprite = "Content/caveman.png";
+                    texture = Entity.Scene.Content.LoadTexture(sprite);
+                    sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+                    stayAnimationFrames = new[]
+                    {
+                        sprites[8 + 0],
+                    };
                     break;
             }
 
@@ -43,14 +78,9 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new BoxCollider(-8, -16, 16, 32));
             Entity.AddComponent(new Team(2));
 
-            var texture = Entity.Scene.Content.LoadTexture(sprite);
-            var sprites = Sprite.SpritesFromAtlas(texture, 32, 32);
             // todo: better way to handle animations
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
-            Animator.AddAnimation("Stay", new[]
-            {
-                sprites[8 + 0],
-            });
+            Animator.AddAnimation("Stay", stayAnimationFrames);
             Animator.Play("Stay");
         }
     }

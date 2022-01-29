@@ -36,6 +36,9 @@
     <None Update="Content\caveman.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\Lone Von Neumann.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Sigrithr.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -46,6 +49,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Content\tileset.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\Von Neumann Swarm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
