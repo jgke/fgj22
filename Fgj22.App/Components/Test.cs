@@ -7,8 +7,10 @@ using Nez.Tiled;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Fgj22.App.Systems;
 using static Nez.Tiled.TiledMapMover;
 using Nez.Tweens;
+using Serilog;
 
 namespace Fgj22.App.Components
 {
@@ -25,13 +27,24 @@ namespace Fgj22.App.Components
         private VirtualIntegerAxis YAxisInput;
         private VirtualButton MeleeButton;
         private int MeleeTime = 0;
+        private TmxMap Map;
+
+        private List<Vector2> MovementPath;
+        private int MovementPathPos = -1;
+
+        public Test(TmxMap Map) {
+            this.Map = Map;
+        }
 
         public override void OnAddedToEntity()
         {
             var texture = Entity.Scene.Content.LoadTexture("Content/Sigrithr.png");
             var sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+            Entity.AddComponent(new BoxCollider(-8, -16, 16, 32));
+            var collisionLayer = Map.GetLayer<TmxLayer>("main");
+            Mover = new TiledMapMover(collisionLayer);
+            Entity.AddComponent(Mover);
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
-            Mover = Entity.GetComponent<TiledMapMover>();
             BoxCollider = Entity.GetComponent<BoxCollider>();
             Entity.AddComponent(new Health(5));
             Entity.AddComponent(new Team(1));
@@ -113,7 +126,33 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-            var velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
+			if (Input.LeftMouseButtonPressed) {
+				var start = Entity.Transform.Position;
+				var end = Input.MousePosition;
+
+                MovementPath = Entity.Scene.GetSceneComponent<PathFinder>().GetRoute(start, end);
+                if(MovementPath != null) {
+                    MovementPathPos = 0;
+                }
+            }
+
+            Vector2 velocity;
+
+            if(MovementPathPos != -1) {
+                var direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
+                if (direction.Length() < 5) {
+                    MovementPathPos += 1;
+                    if(MovementPathPos < MovementPath.Count) {
+                        direction = MovementPath[MovementPathPos] - Entity.Transform.Position;
+                    } else {
+                        MovementPathPos = -1;
+                    }
+                }
+                direction.Normalize();
+                velocity = direction * 150;
+            } else {
+                velocity = new Vector2(XAxisInput.Value, YAxisInput.Value) * 150;
+            }
 
             Mover.Move(velocity * Time.DeltaTime, BoxCollider, CollisionState);
 
