@@ -8,7 +8,7 @@ namespace Fgj22.App.Components
 {
     public class Velocity : Component, IUpdatable
     {
-        private Vector2 Speed;
+        public Vector2 Speed;
 
         public Velocity(Vector2 velocity)
         {
