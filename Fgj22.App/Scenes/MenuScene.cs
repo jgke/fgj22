@@ -30,7 +30,7 @@ namespace Fgj22.App
             table.Row();
             button1.OnClicked += _ =>
             {
-                Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
+                GameState.Instance.DoTransition(() => new StoryScene());
             };
             var button2 = new TextButton("Quit game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button2).SetMinWidth(100).SetMinHeight(30);

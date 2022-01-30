@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System;
+using Nez;
 
 namespace Fgj22.App
 {
@@ -25,10 +27,19 @@ namespace Fgj22.App
         public int Counter = 0;
         [Loggable]
         public HashSet<string> Upgrades = new HashSet<string>();
+        [Loggable]
+        public bool Transitioning; 
 
         public GameState(int levelNum)
         {
             LevelNum = levelNum;
+        }
+
+        public void DoTransition(Func<Scene> act) {
+            this.Transitioning = true;
+            Core.StartSceneTransition(new WindTransition(act)).OnTransitionCompleted += () => {
+                this.Transitioning = false;
+            };
         }
     }
 }

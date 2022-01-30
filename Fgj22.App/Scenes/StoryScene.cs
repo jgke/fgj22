@@ -32,7 +32,9 @@ namespace Fgj22.App
             button1.GetLabel().SetWrap(true);
             button1.OnClicked += _ =>
             {
-                act();
+                if(!GameState.Instance.Transitioning) {
+                    act();
+                }
             };
             return button1;
         }
@@ -225,7 +227,7 @@ namespace Fgj22.App
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("GoToLevel {@A}", this);
-            Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
+            GameState.Instance.DoTransition(() => new GameplayScene());
         }
     }
 

@@ -51,7 +51,7 @@ namespace Fgj22.App
                 var upgradeButton = UiComponents.WrappingTextButton(upgrade.Text, () => {
                     upgrade.Action();
                     GameState.Instance.LevelNum += 1;
-                    Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
+                    GameState.Instance.DoTransition(() => new StoryScene());
                 });
                 table.Add(upgradeButton).SetMinWidth(100).SetMinHeight(30);
                 table.Row();
@@ -59,7 +59,7 @@ namespace Fgj22.App
 
             var contButton = UiComponents.WrappingTextButton("Skip upgrade, continue game", () => {
                 GameState.Instance.LevelNum += 1;
-                Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
+                GameState.Instance.DoTransition(() => new StoryScene());
             });
             table.Add(contButton).SetMinWidth(100).SetMinHeight(30);
         }
