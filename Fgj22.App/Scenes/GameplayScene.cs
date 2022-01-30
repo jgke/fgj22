@@ -64,6 +64,13 @@ namespace Fgj22.App
         {
             base.Update();
 
+            var player = this.FindComponentOfType<Player>();
+
+            if(player == null)
+            {
+                throw new Exception("You lost");
+            }
+
             var enemy = this.FindComponentOfType<Enemy>();
 
             if (enemy == null)

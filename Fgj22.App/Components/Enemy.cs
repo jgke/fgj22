@@ -8,7 +8,7 @@ using Nez.Tiled;
 
 namespace Fgj22.App.Components
 {
-    public class Enemy : Component, IUpdatable, ILoggable
+    public class Enemy : Component, ILoggable
     {
         private SpriteAnimator Animator;
         [Loggable]
@@ -16,10 +16,6 @@ namespace Fgj22.App.Components
         private readonly Player Player;
         private readonly TmxMap Map;
 
-        private bool Shoots;
-        private int MinimumShootingDistance;
-        private float ReloadTime;
-        private float ReloadLeft;
 
         public Enemy(string ty, Player player, TmxMap map)
         {
@@ -90,9 +86,7 @@ namespace Fgj22.App.Components
                     };
 
                     Entity.AddComponent(new EnemyAI(Player, Map, this, 1, 50));
-                    Shoots = true;
-                    MinimumShootingDistance = 300;
-                    ReloadTime = 3;
+                    Entity.AddComponent(new AIRangedAttack(Player, 300, 2, 20, 3, 4000, "projectile.png"));
 
                     break;
             }
@@ -108,39 +102,6 @@ namespace Fgj22.App.Components
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             Animator.AddAnimation("Stay", stayAnimationFrames);
             Animator.Play("Stay");
-        }
-
-        void ShootProjectile()
-        {
-            ReloadLeft -= Time.DeltaTime;
-
-            if(Entity.Transform.Position.Pythagoras(Player.Transform.Position) > MinimumShootingDistance)
-            {
-                return;
-            }
-
-            if(ReloadLeft <= 0)
-            {
-                ReloadLeft = ReloadTime;
-            }
-            else
-            {
-                return;
-            }
-
-            var entity = Entity.Scene.CreateEntity("projectile", Entity.Transform.Position);
-
-            var targetAngle = (Player.Transform.Position - Transform.Position).GetAngle();
-
-            entity.AddComponent(new EnemyProjectile(targetAngle));
-        }
-
-        public void Update()
-        {
-            if(Shoots)
-            {
-                ShootProjectile();
-            }
         }
     }
 }

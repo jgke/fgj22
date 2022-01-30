@@ -42,6 +42,11 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
+            if(Target.Entity == null)
+            {
+                return;
+            }
+
             FrequencyCounter %= 30;
 
             if (FrequencyCounter == 0)
