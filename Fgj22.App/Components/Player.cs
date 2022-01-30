@@ -14,6 +14,8 @@ using Serilog;
 using System.Linq;
 using Fgj22.Spells.Spell;
 using Fgj22.App.Utility;
+using Microsoft.Xna.Framework.Audio;
+using System.IO;
 
 namespace Fgj22.App.Components
 {
@@ -176,7 +178,7 @@ namespace Fgj22.App.Components
                     UpdateFacingRotation();
                 }
 
-                MeleeAttackActive = MeleeButton.IsPressed || Input.LeftMouseButtonPressed;
+                MeleeAttackActive = (MeleeButton.IsPressed || Input.LeftMouseButtonPressed) && !Animator.IsAnimationActive("Melee");
 
                 if (MeleeAttackActive)
                 {
@@ -222,6 +224,8 @@ namespace Fgj22.App.Components
 
         private void UpdateMeleeAttack()
         {
+            Entity.AddComponent(new SoundEffectPlayer("melee"));
+
             var meleeAttack = Entity.Scene.CreateEntity("meleeAttack", Entity.Transform.Position + new Vector2(30, 30));
 
             meleeAttack.AddComponent(new MeleeAttack(this, 10, 1, 30, -45));
