@@ -72,8 +72,8 @@ namespace Fgj22.App.Components
             EditorRenderer = new SpriteRenderer(texture);
             Text = new TextComponent(Graphics.Instance.BitmapFont, Content, new Vector2(-80, -40), Color.White);
 
-            Entity.AddComponent(EditorRenderer);
-            Entity.AddComponent(Text);
+            Entity.AddComponent(EditorRenderer).SetRenderLayer(-100);
+            Entity.AddComponent(Text).SetRenderLayer(-101);
 
             Enabled = false;
             Text.Enabled = false;

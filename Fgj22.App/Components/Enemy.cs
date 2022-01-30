@@ -102,7 +102,7 @@ namespace Fgj22.App.Components
                     };
 
                     Entity.AddComponent(new EnemyAI(Player, Map, this, 1, 50));
-                    Entity.AddComponent(new AIRangedAttack(Player, 300, 2, 20, 3, 4000, "projectile.png"));
+                    //Entity.AddComponent(new AIRangedAttack(Player, 300, 2, 20, 3, 4000, "projectile.png"));
 
                     break;
             }

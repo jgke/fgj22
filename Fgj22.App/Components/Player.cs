@@ -43,6 +43,8 @@ namespace Fgj22.App.Components
         private List<Vector2> MovementPath;
         private int MovementPathPos = -1;
 
+        SpellBase Spell;
+
         public Player(TmxMap Map, Editor editor)
         {
             this.Map = Map;
@@ -158,7 +160,7 @@ namespace Fgj22.App.Components
 
         public void Update()
         {
-            if (OpenEditor.IsPressed)
+            if (OpenEditor.IsPressed && Spell == null)
             {
                 Editor.SetVisibility(!Editor.Enabled);
             }
@@ -254,19 +256,31 @@ namespace Fgj22.App.Components
 
         private void UpdateSpells()
         {
-            if (Editor.Spells.Any())
+            if(Spell != null && Entity.GetComponent<Stunned>() == null)
             {
-                var spell = Editor.Spells.Dequeue();
-
-                if (spell is Fireball fb)
+                if (Spell is Fireball fb)
                 {
                     var entity = Entity.Scene.CreateEntity("fireball", Entity.Transform.Position);
                     entity.AddComponent(new Emp(-fb.Angle * Math.PI / 180));
                 }
-                else if(spell is Zap)
+                else if (Spell is Zap)
                 {
-                    var entity = Entity.Scene.CreateEntity("stun", Entity.Transform.Position);
+                    var entity = Entity.Scene.CreateEntity("stun", Entity.Scene.Camera.MouseToWorldPoint());
                     entity.AddComponent(new Stun());
+                }
+
+
+
+                Spell = null;
+            }
+
+            if (Editor.Spells.Any())
+            {
+                Spell = Editor.Spells.Dequeue();
+
+                if (Spell is Zap)
+                {
+                    Entity.AddComponent(new Stunned(1));
                 }
             }
         }
