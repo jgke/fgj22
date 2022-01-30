@@ -46,6 +46,15 @@
     <None Update="Content\Macrotardigrade.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\particles\Blue Galaxy.pex">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\particles\Giros Gratis.pex">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Content\particles\Plasma Glow.pex">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\nez\effects\transitions\Wind.mgfxo">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

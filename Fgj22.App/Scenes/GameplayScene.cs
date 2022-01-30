@@ -7,6 +7,8 @@ using Nez.Textures;
 using Fgj22.App.Systems;
 using Fgj22.App.Utility;
 using System;
+using Nez.Particles;
+using Serilog;
 
 namespace Fgj22.App
 {
@@ -25,7 +27,8 @@ namespace Fgj22.App
             var topLeft = new Vector2(0, 0);
             var bottomRight = new Vector2(map.TileWidth * map.Width, map.TileWidth * map.Height);
             var tiledEntity = CreateEntity("tiled-map-entity");
-            tiledEntity.AddComponent(new TiledMapRenderer(map, "main"));
+            tiledEntity.AddComponent(new TiledMapRenderer(map, "main"))
+                .SetRenderLayer(100);
 
             var cameraBounds = new CameraBounds(topLeft, bottomRight);
 

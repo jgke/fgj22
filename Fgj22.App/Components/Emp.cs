@@ -5,6 +5,8 @@ using Nez.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Nez.Particles;
+using Serilog;
 
 namespace Fgj22.App.Components
 {
@@ -30,8 +32,19 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new BoxCollider(30, 30));
             Entity.AddComponent(new Health(1000));
             Entity.AddComponent(new Lifetime(4));
+            Entity.AddComponent(new Velocity(Velocity));
 
-            this.AddComponent(new Velocity(Velocity));
+			var config = Entity.Scene.Content.LoadParticleEmitterConfig("Content/particles/Blue Galaxy.pex");
+			var _particleEmitter = Entity.AddComponent(new ParticleEmitter(config));
+            _particleEmitter.SetRenderLayer(-100);
+			_particleEmitter.CollisionConfig.Enabled = false;
+			_particleEmitter.SimulateInWorldSpace = true;
+        }
+
+        public override void OnRemovedFromEntity() {
+           Particles.TimedParticleEntity(
+               Entity.Scene, Entity.Transform.Position, "Content/particles/Giros Gratis.pex", 2);
+            base.OnRemovedFromEntity();
         }
     }
 }
