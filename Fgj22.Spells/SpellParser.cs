@@ -16,6 +16,10 @@ namespace Fgj22.Spells
             {
                 return Fireball.Create(command);
             }
+            else if (Zap.Pattern.Matches(command).Count == 1)
+            {
+                return Zap.Create(command);
+            }
             else
             {
                 return null;
