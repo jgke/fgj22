@@ -32,7 +32,9 @@ namespace Fgj22.App
     class ShopComponent : Component
     {
         static List<Upgrade> UpgradeList = new List<Upgrade>() {
-            new Upgrade("doublespeed", "Double speed", () => { GameState.Instance.PlayerSpeed *= 2;} )
+            new Upgrade("doublespeed", "Double movement speed", () => { GameState.Instance.PlayerSpeed *= 2;} ),
+            new Upgrade("", "Unlock 'HEAL'", () => {}, new string[]{"doublespeed"}),
+            new Upgrade("", "Increase melee attack damage", () => {}, new string[]{"doublespeed"}),
         };
 
         public override void OnAddedToEntity()
@@ -43,17 +45,19 @@ namespace Fgj22.App
             var table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
-            var availableUpgrades = UpgradeList.Where(upgrade => upgrade.Dependencies == null || upgrade.Dependencies.All(
-                dependency => GameState.Instance.Upgrades.Contains(dependency)));
+            var availableUpgrades = UpgradeList
+            .Where(upgrade => upgrade.Dependencies == null || upgrade.Dependencies.All(dependency => GameState.Instance.Upgrades.Contains(dependency)))
+            .Where(upgrade => !GameState.Instance.Upgrades.Contains(upgrade.Id));
 
             foreach (var upgrade in availableUpgrades)
             {
                 var upgradeButton = UiComponents.WrappingTextButton(upgrade.Text, () => {
                     upgrade.Action();
                     GameState.Instance.LevelNum += 1;
+                    GameState.Instance.Upgrades.Add(upgrade.Id);
                     GameState.Instance.DoTransition(() => new StoryScene());
                 });
-                table.Add(upgradeButton).SetMinWidth(100).SetMinHeight(30);
+                table.Add(upgradeButton).SetMinWidth(100).SetMinHeight(30).SetSpaceBottom(5);
                 table.Row();
             }
 

@@ -35,7 +35,7 @@ namespace Fgj22.App
             table.Row();
 
             var button1 = new TextButton("Start game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-            table.Add(button1).SetMinWidth(100).SetMinHeight(30);
+            table.Add(button1).SetMinWidth(100).SetMinHeight(30).SetSpaceBottom(10);
             table.Row();
             button1.OnClicked += _ =>
             {
