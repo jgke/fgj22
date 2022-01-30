@@ -36,6 +36,7 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            Log.Information("Line {@A}", this);
             table.Bottom();
             var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
             table.Add(img).Bottom().Width(100).Height(100);
@@ -57,7 +58,7 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
-
+            Log.Information("IncrementCounterBy {@A}", this);
             GameState.Instance.Counter += Amount;
             cycleStory();
         }
@@ -74,6 +75,7 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            Log.Information("Exposition {@A}", this);
             table.Bottom();
             var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
@@ -95,8 +97,10 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            Log.Information("Fork {@A}", this);
             if (choice == null)
             {
+                Log.Information("Fork choice null");
                 table.Bottom();
                 for (int i = 0; i < Choices.Count; i++)
                 {
@@ -113,11 +117,34 @@ namespace Fgj22.App
             }
             else
             {
-                Log.Information("{@A}", choice);
-                Log.Information("{@A}", ChoiceBuilders);
+                Log.Information("Fork choice {@A}", choice);
 
                 ChoiceBuilders[choice.Value].CreateUI(table, entity, cycleStory);
             }
+        }
+    }
+
+    class CounterFork : StoryPiece
+    {
+        List<Func<int, bool>> Conditions;
+        List<StoryBuilder> Builders;
+
+        public CounterFork(List<Func<int, bool>> conditions, List<StoryBuilder> builders)
+        {
+            Conditions = conditions;
+            Builders = builders;
+        }
+
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
+            Log.Information("CounterFork {@A}", this);
+            for (int i = 0; i < Conditions.Count; i++) {
+                if(Conditions[i](GameState.Instance.Counter)) {
+                    Builders[i].CreateUI(table, entity, cycleStory);
+                    return;
+                }
+            }
+            throw new Exception("Unreachable");
         }
     }
 
@@ -125,6 +152,7 @@ namespace Fgj22.App
     {
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            Log.Information("GoToLevel {@A}", this);
             Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
         }
     }
@@ -149,14 +177,23 @@ namespace Fgj22.App
 
     class CounterForkBuilder
     {
-        public CounterForkBuilder() { }
+        public List<Func<int, bool>> Conditions;
+        public List<StoryBuilder> Builders;
+        public CounterForkBuilder() {
+            Conditions = new List<Func<int, bool>>();
+            Builders = new List<StoryBuilder>();
+        }
         public CounterForkBuilder IfMoreThan(int amount, StoryBuilder innerContent)
         {
-            throw new Exception("not implemented");
+            Conditions.Add(n => n > amount);
+            Builders.Add(innerContent);
+            return this;
         }
         public CounterForkBuilder Otherwise(StoryBuilder innerContent)
         {
-            throw new Exception("not implemented");
+            Conditions.Add(n => true);
+            Builders.Add(innerContent);
+            return this;
         }
     }
 
@@ -202,7 +239,8 @@ namespace Fgj22.App
 
         public StoryBuilder CounterFork(CounterForkBuilder builder)
         {
-            throw new Exception("not implemented");
+            lines.Add(new CounterFork(builder.Conditions, builder.Builders));
+            return this;
         }
 
         public StoryBuilder GoToLevel()
@@ -213,6 +251,7 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            Log.Information("StoryBuilder choice={@A} {@B}", currentStoryLine, this);
             var line = lines[currentStoryLine];
             line.CreateUI(table, entity, () =>
             {
@@ -256,11 +295,11 @@ namespace Fgj22.App
                                         .IncrementCounterBy(1))
                             .Choice("Toka vaihtoehto", new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit tokan vaihtoedon")))
-                        //.CounterFork(new CounterForkBuilder()
-                        //    .IfMoreThan(0, new StoryBuilder()
-                        //                .Line("Content/SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
-                        //    .Otherwise( new StoryBuilder()
-                        //                .Line("Content/SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
+                        .CounterFork(new CounterForkBuilder()
+                            .IfMoreThan(0, new StoryBuilder()
+                                        .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
+                            .Otherwise( new StoryBuilder()
+                                        .Line("SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
                         .Line("SigrithrAvatar.png", "Sigrithr", "tama on keskustelun loppu")
                         .GoToLevel();
                     break;

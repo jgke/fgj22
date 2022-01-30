@@ -11,13 +11,15 @@ using System;
 
 namespace Fgj22.App
 {
-    class Upgrade {
+    class Upgrade
+    {
         string Id;
         Func<GameState, GameState> Action;
         string Text;
         string[] Dependencies;
 
-        public Upgrade(string id, string text, Func<GameState, GameState> action, string[] dependencies = null) {
+        public Upgrade(string id, string text, Func<GameState, GameState> action, string[] dependencies = null)
+        {
             this.Id = id;
             this.Text = text;
             this.Action = action;

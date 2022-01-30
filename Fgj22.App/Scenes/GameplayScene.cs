@@ -69,7 +69,7 @@ namespace Fgj22.App
 
             var player = this.FindComponentOfType<Player>();
 
-            if(player == null)
+            if (player == null)
             {
                 throw new Exception("You lost");
             }
