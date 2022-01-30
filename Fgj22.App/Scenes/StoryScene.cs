@@ -34,16 +34,48 @@ namespace Fgj22.App
             this.CharacterIsRight = characteIsRight;
         }
 
-        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        public void CreateUI(Table mainTable, Entity entity, Action cycleStory)
         {
             Log.Information("Line {@A}", this);
-            table.Bottom();
-            var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
-            table.Add(img).Bottom().Width(100).Height(100);
-            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-            table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-            table.Row();
-            button1.OnClicked += _ => { cycleStory(); };
+            mainTable.Bottom();
+            var table = new Table();
+            mainTable.Add(table).Expand().Bottom().SetFillX();
+
+            LabelStyle labelStyle = new LabelStyle() {
+                    FontColor = Color.Black,
+                    Background = new PrimitiveDrawable(Color.DarkGray)
+                };
+
+            if(this.CharacterIsRight) {
+                var fakeTitle = new Label(" ", labelStyle);
+                table.Add(fakeTitle).Expand().Bottom().SetFillX();
+
+                var title = new Label(Character, labelStyle);
+                title.SetAlignment(Align.Right, Align.Bottom);
+                table.Add(title).Bottom().Width(100);
+                table.Row();
+
+                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+                button1.OnClicked += _ => { cycleStory(); };
+
+                var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
+                table.Add(img).Bottom().Width(100).Height(100);
+            } else {
+                var title = new Label(Character, labelStyle);
+                title.SetAlignment(Align.Left, Align.Bottom);
+                table.Add(title).Bottom().Width(100);
+                var fakeTitle = new Label(" ", labelStyle);
+                table.Add(fakeTitle).Expand().Bottom().SetFillX();
+                table.Row();
+
+                var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
+                table.Add(img).Bottom().Width(100).Height(100);
+
+                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+                button1.OnClicked += _ => { cycleStory(); };
+            }
         }
     }
 
