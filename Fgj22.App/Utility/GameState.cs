@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Fgj22.App
 {
     public class GameState : ILoggable
@@ -21,6 +23,8 @@ namespace Fgj22.App
         public int PlayerSpeed = 150;
         [Loggable]
         public int Counter = 0;
+        [Loggable]
+        public HashSet<string> Upgrades = new HashSet<string>();
 
         public GameState(int levelNum)
         {

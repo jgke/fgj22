@@ -24,7 +24,7 @@ namespace Fgj22.App
         }
     }
 
-    static class UiComponents
+    public static class UiComponents
     {
         public static TextButton WrappingTextButton(string Text, Action act)
         {
@@ -395,7 +395,8 @@ namespace Fgj22.App
 
                 default:
                     storyBuilder = new StoryBuilder()
-                        .Line("SigrithrAvatar.png", "Sigrithr", "moi");
+                        .Line("SigrithrAvatar.png", "Sigrithr", "moi")
+                        .GoToLevel();
                     break;
             }
 

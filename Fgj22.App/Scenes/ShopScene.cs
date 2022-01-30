@@ -8,17 +8,19 @@ using Fgj22.App.Systems;
 using Fgj22.App.Utility;
 using Nez.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Fgj22.App
 {
     class Upgrade
     {
-        string Id;
-        Func<GameState, GameState> Action;
-        string Text;
-        string[] Dependencies;
+        public string Id;
+        public Action Action;
+        public string Text;
+        public string[] Dependencies;
 
-        public Upgrade(string id, string text, Func<GameState, GameState> action, string[] dependencies = null)
+        public Upgrade(string id, string text, Action action, string[] dependencies = null)
         {
             this.Id = id;
             this.Text = text;
@@ -29,6 +31,10 @@ namespace Fgj22.App
 
     class ShopComponent : Component
     {
+        static List<Upgrade> UpgradeList = new List<Upgrade>() {
+            new Upgrade("doublespeed", "Double speed", () => { GameState.Instance.PlayerSpeed *= 2;} )
+        };
+
         public override void OnAddedToEntity()
         {
             UICanvas canvas = new UICanvas();
@@ -37,22 +43,25 @@ namespace Fgj22.App
             var table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
-            var speedButton = new TextButton("Double speed", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-            table.Add(speedButton).SetMinWidth(100).SetMinHeight(30);
-            table.Row();
-            speedButton.OnClicked += _ =>
-            {
-                GameState.Instance.PlayerSpeed *= 2;
-            };
+            var availableUpgrades = UpgradeList.Where(upgrade => upgrade.Dependencies == null || upgrade.Dependencies.All(
+                dependency => GameState.Instance.Upgrades.Contains(dependency)));
 
-            var button1 = new TextButton("Continue game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-            table.Add(button1).SetMinWidth(100).SetMinHeight(30);
-            table.Row();
-            button1.OnClicked += _ =>
+            foreach (var upgrade in availableUpgrades)
             {
+                var upgradeButton = UiComponents.WrappingTextButton(upgrade.Text, () => {
+                    upgrade.Action();
+                    GameState.Instance.LevelNum += 1;
+                    Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
+                });
+                table.Add(upgradeButton).SetMinWidth(100).SetMinHeight(30);
+                table.Row();
+            }
+
+            var contButton = UiComponents.WrappingTextButton("Skip upgrade, continue game", () => {
                 GameState.Instance.LevelNum += 1;
                 Core.StartSceneTransition(new WindTransition(() => new StoryScene()));
-            };
+            });
+            table.Add(contButton).SetMinWidth(100).SetMinHeight(30);
         }
     }
 
