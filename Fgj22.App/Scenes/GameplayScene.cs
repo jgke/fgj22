@@ -85,7 +85,7 @@ namespace Fgj22.App
             if (CompletedTimer < 0)
             {
                 CompletedTimer = 999999;
-                Core.StartSceneTransition(new WindTransition(() => new ShopScene()));
+                GameState.Instance.DoTransition(() => new ShopScene());
             }
         }
     }
