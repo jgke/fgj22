@@ -19,7 +19,8 @@ namespace Fgj22.App
         void CreateUI(Table table, Entity entity, Action cycleStory);
     }
 
-    class Line : StoryPiece {
+    class Line : StoryPiece
+    {
         public string Avatar;
         public string Character;
         public string Text;
@@ -33,9 +34,10 @@ namespace Fgj22.App
             this.CharacterIsRight = characteIsRight;
         }
 
-        public void CreateUI(Table table, Entity entity, Action cycleStory) {
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
             table.Bottom();
-            var img = new Image(entity.Scene.Content.LoadTexture(Character));
+            var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
             table.Add(img).Bottom().Width(100).Height(100);
             var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
@@ -44,28 +46,125 @@ namespace Fgj22.App
         }
     }
 
+    class IncrementCounterBy : StoryPiece
+    {
+        public int Amount;
+
+        public IncrementCounterBy(int amount)
+        {
+            this.Amount = amount;
+        }
+
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
+
+            GameState.Instance.Counter += Amount;
+            cycleStory();
+        }
+    }
+
+    class Exposition : StoryPiece
+    {
+        public string Text;
+
+        public Exposition(string text)
+        {
+            this.Text = text;
+        }
+
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
+            table.Bottom();
+            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+            button1.OnClicked += _ => { cycleStory(); };
+        }
+    }
+
+    class Fork : StoryPiece
+    {
+        public int? choice = null;
+        List<string> Choices;
+        List<StoryBuilder> ChoiceBuilders;
+
+        public Fork(List<string> choices, List<StoryBuilder> choiceBuilders)
+        {
+            Choices = choices;
+            ChoiceBuilders = choiceBuilders;
+        }
+
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
+            if (choice == null)
+            {
+                table.Bottom();
+                for (int i = 0; i < Choices.Count; i++)
+                {
+                    int num = i;
+                    var button1 = new TextButton(Choices[i], TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                    table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+                    button1.OnClicked += _ =>
+                    {
+                        table.Clear();
+                        choice = num;
+                        this.CreateUI(table, entity, cycleStory);
+                    };
+                }
+            }
+            else
+            {
+                Log.Information("{@A}", choice);
+                Log.Information("{@A}", ChoiceBuilders);
+
+                ChoiceBuilders[choice.Value].CreateUI(table, entity, cycleStory);
+            }
+        }
+    }
+
+    class GoToLevel : StoryPiece
+    {
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
+        {
+            Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
+        }
+    }
+
     class ForkBuilder
     {
-        public ForkBuilder() {}
-        public ForkBuilder Choice(string text, StoryBuilder innerContent) {
-            throw new Exception("not implemented");
+        public List<string> Choices;
+        public List<StoryBuilder> ChoiceBuilders;
+
+        public ForkBuilder()
+        {
+            Choices = new List<string>();
+            ChoiceBuilders = new List<StoryBuilder>();
+        }
+        public ForkBuilder Choice(string text, StoryBuilder builder)
+        {
+            Choices.Add(text);
+            ChoiceBuilders.Add(builder);
+            return this;
         }
     }
 
     class CounterForkBuilder
     {
-        public CounterForkBuilder() {}
-        public CounterForkBuilder IfMoreThan(int amount, StoryBuilder innerContent) {
+        public CounterForkBuilder() { }
+        public CounterForkBuilder IfMoreThan(int amount, StoryBuilder innerContent)
+        {
             throw new Exception("not implemented");
         }
-        public CounterForkBuilder Otherwise(StoryBuilder innerContent) {
+        public CounterForkBuilder Otherwise(StoryBuilder innerContent)
+        {
             throw new Exception("not implemented");
         }
     }
 
-    class StoryBuilder
+    class StoryBuilder : StoryPiece
     {
         public List<StoryPiece> lines;
+        int currentStoryLine = 0;
+
         public StoryBuilder()
         {
             lines = new List<StoryPiece>();
@@ -85,18 +184,20 @@ namespace Fgj22.App
 
         public StoryBuilder IncrementCounterBy(int amount)
         {
-            GameState.Instance.Counter += amount;
+            lines.Add(new IncrementCounterBy(amount));
             return this;
         }
 
         public StoryBuilder Exposition(string text)
         {
-            throw new Exception("not implemented");
+            lines.Add(new Exposition(text));
+            return this;
         }
 
         public StoryBuilder Fork(ForkBuilder builder)
         {
-            throw new Exception("not implemented");
+            lines.Add(new Fork(builder.Choices, builder.ChoiceBuilders));
+            return this;
         }
 
         public StoryBuilder CounterFork(CounterForkBuilder builder)
@@ -104,26 +205,34 @@ namespace Fgj22.App
             throw new Exception("not implemented");
         }
 
-        public Story Build()
+        public StoryBuilder GoToLevel()
         {
-            return new Story(lines);
-        }   
-    }
+            lines.Add(new GoToLevel());
+            return this;
+        }
 
-    class Story
-    {
-        public List<StoryPiece> Content;
-
-        public Story(List<StoryPiece> content)
+        public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
-            this.Content = content;
+            var line = lines[currentStoryLine];
+            line.CreateUI(table, entity, () =>
+            {
+                if (currentStoryLine < lines.Count - 1)
+                {
+                    currentStoryLine += 1;
+                    table.ClearChildren();
+                    this.CreateUI(table, entity, cycleStory);
+                }
+                else
+                {
+                    cycleStory();
+                }
+            });
         }
     }
 
     class StoryComponent : Component, IUpdatable
     {
-        int storyLine = 0;
-        Story story;
+        StoryBuilder storyBuilder;
         Table table;
         private VirtualButton StoryAdvanceButton;
 
@@ -132,7 +241,6 @@ namespace Fgj22.App
             StoryAdvanceButton = new VirtualButton();
             StoryAdvanceButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
             StoryAdvanceButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
-            StoryBuilder storyBuilder;
 
             Log.Information("Loading story {A}", GameState.Instance);
             switch (GameState.Instance.LevelNum)
@@ -140,20 +248,21 @@ namespace Fgj22.App
                 case 0:
                     storyBuilder = new StoryBuilder()
                         .Line("SigrithrAvatar.png", "Sigrithr", "moi")
-                        .LineRight("SigrithrAvatar.png", "Sigrithr", "moi")
-                        .Exposition("pelkkää tarinatekstiä")
+                        .LineRight("SigrithrAvatar.png", "Sigrithr", "moi toinen")
+                        .Exposition("pelkkaa tarinatekstia")
                         .Fork(new ForkBuilder()
                             .Choice("Eka vaihtoehto", new StoryBuilder()
-                                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "Valitsit ekan vaihtoedon")
+                                        .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit ekan vaihtoedon")
                                         .IncrementCounterBy(1))
-                            .Choice("Toka vaihtoehto",  new StoryBuilder()
-                                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "Valitsit tokan vaihtoedon")))
-                        .CounterFork(new CounterForkBuilder()
-                            .IfMoreThan(0, new StoryBuilder()
-                                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
-                            .Otherwise( new StoryBuilder()
-                                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
-                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "tämä on keskustelun loppu");
+                            .Choice("Toka vaihtoehto", new StoryBuilder()
+                                        .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit tokan vaihtoedon")))
+                        //.CounterFork(new CounterForkBuilder()
+                        //    .IfMoreThan(0, new StoryBuilder()
+                        //                .Line("Content/SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
+                        //    .Otherwise( new StoryBuilder()
+                        //                .Line("Content/SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
+                        .Line("SigrithrAvatar.png", "Sigrithr", "tama on keskustelun loppu")
+                        .GoToLevel();
                     break;
 
                 default:
@@ -161,8 +270,6 @@ namespace Fgj22.App
                         .Line("Content/SigrithrAvatar.png", "Sigrithr", "moi");
                     break;
             }
-
-            story = storyBuilder.Build();
 
             UICanvas canvas = new UICanvas();
             Entity.AddComponent(canvas);
@@ -180,25 +287,20 @@ namespace Fgj22.App
 
         public void CycleStory()
         {
-            if (storyLine >= story.Content.Count)
+            table.ClearChildren();
+            storyBuilder.CreateUI(table, Entity, () =>
             {
-                Core.StartSceneTransition(new WindTransition(() => new GameplayScene()));
-            }
-            else
-            {
-                var line = story.Content[storyLine];
-                table.ClearChildren();
-                line.CreateUI(table, Entity, CycleStory);
-                storyLine += 1;
-            }
+                throw new Exception("unreachable");
+            });
         }
 
         void IUpdatable.Update()
         {
-            if (StoryAdvanceButton.IsPressed)
-            {
-                CycleStory();
-            }
+            //if (StoryAdvanceButton.IsPressed)
+            //{
+            //    storyLine += 1;
+            //    CycleStory();
+            //}
         }
     }
 
