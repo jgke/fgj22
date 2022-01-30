@@ -67,10 +67,10 @@ namespace Fgj22.App.Components
         public override void OnAddedToEntity()
         {
             base.OnAddedToEntity();
-            var texture = Entity.Scene.Content.LoadTexture("Content/editor.png");
+            var texture = Entity.Scene.Content.LoadTexture("Content/cmd.png");
 
             EditorRenderer = new SpriteRenderer(texture);
-            Text = new TextComponent(Graphics.Instance.BitmapFont, Content, new Vector2(-80, -40), Color.White);
+            Text = new TextComponent(Graphics.Instance.BitmapFont, Content, new Vector2(-86, -18), Color.White);
 
             Entity.AddComponent(EditorRenderer).SetRenderLayer(-100);
             Entity.AddComponent(Text).SetRenderLayer(-101);

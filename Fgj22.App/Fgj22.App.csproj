@@ -37,6 +37,9 @@
     <None Update="Content\caveman.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\cmd.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\fireball.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
