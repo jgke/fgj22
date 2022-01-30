@@ -104,7 +104,7 @@ namespace Fgj22.App.Components
         {
             base.OnRemovedFromEntity();
 
-            HealthBar.Destroy();
+            HealthBar?.Destroy();
         }
 
     }

@@ -107,17 +107,19 @@ namespace Fgj22.App.Components
             XAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadLeftRight());
             XAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickX());
             XAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Left, Keys.Right));
+            XAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.A, Keys.D));
 
             // vertical input from dpad, left stick or keyboard up/down
             YAxisInput = new VirtualIntegerAxis();
             YAxisInput.Nodes.Add(new VirtualAxis.GamePadDpadUpDown());
             YAxisInput.Nodes.Add(new VirtualAxis.GamePadLeftStickY());
             YAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.Up, Keys.Down));
+            YAxisInput.Nodes.Add(new VirtualAxis.KeyboardKeys(VirtualInput.OverlapBehavior.TakeNewer, Keys.W, Keys.S));
 
-            // Melee. A on the keyboard or A on the gamepad
+            // Melee. Q on keyboard, A on the gamepad
             MeleeButton = new VirtualButton();
-            MeleeButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.A));
             MeleeButton.Nodes.Add(new VirtualButton.GamePadButton(0, Buttons.A));
+            MeleeButton.Nodes.Add(new VirtualButton.KeyboardKey(Keys.Q));
 
             //Editor
             OpenEditor = new VirtualButton();

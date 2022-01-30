@@ -395,7 +395,7 @@ namespace Fgj22.App
 
                 default:
                     storyBuilder = new StoryBuilder()
-                        .Line("Content/SigrithrAvatar.png", "Sigrithr", "moi");
+                        .Line("SigrithrAvatar.png", "Sigrithr", "moi");
                     break;
             }
 
