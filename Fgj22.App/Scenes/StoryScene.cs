@@ -1,4 +1,4 @@
-using Nez.Sprites;
+﻿using Nez.Sprites;
 using Microsoft.Xna.Framework;
 using Nez;
 using Fgj22.App.Components;
@@ -318,9 +318,13 @@ namespace Fgj22.App
             {
                 case 0:
                     storyBuilder = new StoryBuilder()
-                        .Line("SigrithrAvatar.png", "Sigrithr", "moi")
-                        .LineRight("SigrithrAvatar.png", "Sigrithr", "moi toinen")
-                        .Exposition("pelkkaa tarinatekstia")
+                        .Exposition("29. September 2122, CMV Amehait, Trojan asteroid cluster")
+                        .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "Thank you yet again, Dosser! How do you always manage to fix my PDA no matter how jumbled up I manage to get it?")
+                        .Line("SigrithrAvatar.png", "Sigrithr", "I'm not quite certain myself, ma'am, I just reinstalled Terracotta Contortionist and turned it off and on again. It's probably a driver issue.")
+
+                        .Line("LarryAvatar.png", "SW Spp. O. Dosser", "")
+                        .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "")
+                        .Exposition("")
                         .Fork(new ForkBuilder()
                             .Choice("Eka vaihtoehto", new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit ekan vaihtoedon")
