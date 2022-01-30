@@ -60,7 +60,7 @@ namespace Fgj22.App.Components
             Animator = Entity.AddComponent(new SpriteAnimator(sprites[0]));
             BoxCollider = Entity.GetComponent<BoxCollider>();
 
-            Entity.AddComponent(new Health(5));
+            Entity.AddComponent(new Health(5, true));
             Entity.AddComponent(new Team(Faction.Friendly, true));
 
             int r = 8;

@@ -109,7 +109,7 @@ namespace Fgj22.App.Components
 
             BoxCollider = new BoxCollider(-8, -16, 16, 32);
 
-            Entity.AddComponent(new Health(health));
+            Entity.AddComponent(new Health(health, true));
             Entity.AddComponent(new Damage(collisionDamage, false));
             Entity.AddComponent(BoxCollider);
             Entity.AddComponent(new Team(Faction.Enemy, true));

@@ -37,7 +37,7 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new Damage(Damage, true));
             Entity.AddComponent(new Team(Faction.Enemy, false));
             Entity.AddComponent(new BoxCollider(Width, Width));
-            Entity.AddComponent(new Health(1000));
+            Entity.AddComponent(new Health(1000, false));
             Entity.AddComponent(new Lifetime(Lifetime));
             Entity.AddComponent(new Velocity(Velocity));
 
