@@ -50,7 +50,7 @@ namespace Fgj22.App
             foreach (TmxObject itemSpawnPoint in enemySpawns)
             {
                 var enemy = CreateEntity("enemy", new Vector2(itemSpawnPoint.X, itemSpawnPoint.Y));
-                enemy.AddComponent(new Enemy("Macrotardigrade", player, map));
+                enemy.AddComponent(new Enemy(itemSpawnPoint.Name, player, map));
             }
 
             Camera.Entity.AddComponent(new FollowCamera(playerEntity));

@@ -73,6 +73,24 @@ namespace Fgj22.App.Components
                     Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
                     break;
 
+                case "Von Neumann Shooter":
+                    health = 7;
+                    collisionDamage = 2;
+                    sprite = "Content/Von Neumann Shooter.png";
+                    texture = Entity.Scene.Content.LoadTexture(sprite);
+                    sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+                    stayAnimationFrames = new[]
+                    {
+                        sprites[0 + 0],
+                        sprites[0 + 1],
+                        sprites[0 + 2],
+                        sprites[0 + 3],
+                        sprites[0 + 4]
+                    };
+                    Entity.AddComponent(new EnemyAI(Player, Map, this, 1, 200));
+                    Entity.AddComponent(new AIRangedAttack(Player, 300, 2, 20, 3, 4000, "projectile.png"));
+                    break;
+
                 case "Macrotardigrade":
                     health = 20;
                     collisionDamage = 3;
