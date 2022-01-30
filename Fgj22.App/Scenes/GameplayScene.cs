@@ -47,7 +47,7 @@ namespace Fgj22.App
             foreach (TmxObject itemSpawnPoint in enemySpawns)
             {
                 var enemy = CreateEntity("enemy", new Vector2(itemSpawnPoint.X, itemSpawnPoint.Y));
-                enemy.AddComponent(new Enemy("Von Neumann Swarm", player, map));
+                enemy.AddComponent(new Enemy("Macrotardigrade", player, map));
             }
 
             var shootingEnemy = CreateEntity("enemy", new Vector2(200, 200));

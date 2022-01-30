@@ -73,6 +73,22 @@ namespace Fgj22.App.Components
                     Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
                     break;
 
+                case "Macrotardigrade":
+                    health = 20;
+                    collisionDamage = 3;
+                    sprite = "Content/Macrotardigrade.png";
+                    texture = Entity.Scene.Content.LoadTexture(sprite);
+                    sprites = Sprite.SpritesFromAtlas(texture, 64, 64);
+                    stayAnimationFrames = new[]
+                    {
+                        sprites[0 + 0],
+                        sprites[0 + 1],
+                        sprites[0 + 2],
+                        sprites[0 + 3],
+                        sprites[0 + 4]
+                    };
+                    break;
+
                 default:
                     Console.WriteLine("Created unknown enemy type (replacing with standardEnemy): " + ty);
                     health = 5;
