@@ -10,6 +10,7 @@ using Nez.UI;
 using System.Collections.Generic;
 using Serilog;
 using System;
+using System.Text;
 using Microsoft.Xna.Framework.Input;
 
 namespace Fgj22.App
@@ -17,6 +18,38 @@ namespace Fgj22.App
     interface StoryPiece
     {
         void CreateUI(Table table, Entity entity, Action cycleStory);
+        void DoCycle(Action cycleStory)
+        {
+            cycleStory();
+        }
+    }
+
+    static class UiComponents
+    {
+        public static TextButton WrappingTextButton(string Text, Action act)
+        {
+            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            button1.GetLabel().SetWrap(true);
+            button1.OnClicked += _ =>
+            {
+                act();
+            };
+            return button1;
+        }
+
+        public static string SafeString(string inputString)
+        {
+            return Encoding.ASCII.GetString(
+                Encoding.Convert(
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(
+                        Encoding.ASCII.EncodingName,
+                        new EncoderReplacementFallback("_"),
+                        new DecoderExceptionFallback()
+                        ),
+                    Encoding.UTF8.GetBytes(inputString)
+                ));
+        }
     }
 
     class Line : StoryPiece
@@ -29,8 +62,8 @@ namespace Fgj22.App
         public Line(string avatar, string character, string text, bool characteIsRight)
         {
             this.Avatar = avatar;
-            this.Character = character;
-            this.Text = text;
+            this.Character = UiComponents.SafeString(character);
+            this.Text = UiComponents.SafeString(text);
             this.CharacterIsRight = characteIsRight;
         }
 
@@ -41,12 +74,14 @@ namespace Fgj22.App
             var table = new Table();
             mainTable.Add(table).Expand().Bottom().SetFillX();
 
-            LabelStyle labelStyle = new LabelStyle() {
-                    FontColor = Color.Black,
-                    Background = new PrimitiveDrawable(Color.DarkGray)
-                };
+            LabelStyle labelStyle = new LabelStyle()
+            {
+                FontColor = Color.Black,
+                Background = new PrimitiveDrawable(Color.DarkGray)
+            };
 
-            if(this.CharacterIsRight) {
+            if (this.CharacterIsRight)
+            {
                 var fakeTitle = new Label(" ", labelStyle);
                 table.Add(fakeTitle).Expand().Bottom().SetFillX();
 
@@ -55,13 +90,14 @@ namespace Fgj22.App
                 table.Add(title).Bottom().Width(100);
                 table.Row();
 
-                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
                 table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                button1.OnClicked += _ => { cycleStory(); };
 
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
                 table.Add(img).Bottom().Width(100).Height(100);
-            } else {
+            }
+            else
+            {
                 var title = new Label(Character, labelStyle);
                 title.SetAlignment(Align.Left, Align.Bottom);
                 table.Add(title).Bottom().Width(100);
@@ -72,9 +108,8 @@ namespace Fgj22.App
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
                 table.Add(img).Bottom().Width(100).Height(100);
 
-                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
                 table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                button1.OnClicked += _ => { cycleStory(); };
             }
         }
     }
@@ -91,6 +126,11 @@ namespace Fgj22.App
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("IncrementCounterBy {@A}", this);
+            DoCycle(cycleStory);
+        }
+
+        public void DoCycle(Action cycleStory)
+        {
             GameState.Instance.Counter += Amount;
             cycleStory();
         }
@@ -102,16 +142,15 @@ namespace Fgj22.App
 
         public Exposition(string text)
         {
-            this.Text = text;
+            this.Text = UiComponents.SafeString(text);
         }
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("Exposition {@A}", this);
             table.Bottom();
-            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
             table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-            button1.OnClicked += _ => { cycleStory(); };
         }
     }
 
@@ -137,14 +176,13 @@ namespace Fgj22.App
                 for (int i = 0; i < Choices.Count; i++)
                 {
                     int num = i;
-                    var button1 = new TextButton(Choices[i], TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-                    table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                    button1.OnClicked += _ =>
+                    var button1 = UiComponents.WrappingTextButton(UiComponents.SafeString(Choices[i]), () =>
                     {
                         table.Clear();
                         choice = num;
                         this.CreateUI(table, entity, cycleStory);
-                    };
+                    });
+                    table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
                 }
             }
             else
@@ -170,8 +208,10 @@ namespace Fgj22.App
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("CounterFork {@A}", this);
-            for (int i = 0; i < Conditions.Count; i++) {
-                if(Conditions[i](GameState.Instance.Counter)) {
+            for (int i = 0; i < Conditions.Count; i++)
+            {
+                if (Conditions[i](GameState.Instance.Counter))
+                {
                     Builders[i].CreateUI(table, entity, cycleStory);
                     return;
                 }
@@ -211,7 +251,8 @@ namespace Fgj22.App
     {
         public List<Func<int, bool>> Conditions;
         public List<StoryBuilder> Builders;
-        public CounterForkBuilder() {
+        public CounterForkBuilder()
+        {
             Conditions = new List<Func<int, bool>>();
             Builders = new List<StoryBuilder>();
         }
@@ -318,12 +359,24 @@ namespace Fgj22.App
             {
                 case 0:
                     storyBuilder = new StoryBuilder()
-                        .Exposition("29. September 2122, CMV Amehait, Trojan asteroid cluster")
+                        .Exposition("29. September 2122, CMV Amehait, äTrojan asteroid cluster")
                         .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "Thank you yet again, Dosser! How do you always manage to fix my PDA no matter how jumbled up I manage to get it?")
                         .Line("SigrithrAvatar.png", "Sigrithr", "I'm not quite certain myself, ma'am, I just reinstalled Terracotta Contortionist and turned it off and on again. It's probably a driver issue.")
+                        .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "Don't you sell yourself short, Lawrence Demetrius Dosser! You're the only one on this ship who can do what you do. Always remember, you don't need to be good to be the best!")
+                        .Line("LarryAvatar.png", "SW Spp. O. Dosser", "Yes, ma'am, now that you put it like that, I can only agree.")
+                        .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "And Dosser, please, call me Leslie. At least when there's no moles around to get any wrong ideas, I think it's best stand in close order. I'll need you to be at hand and ready if this thing's brain decides to fry itself right when it matters.")
+                        .Line("LarryAvatar.png", "SW Spp. O. Dosser", "Roger that, ma- I mean sure, Leslie. You're welcome to call me Larry")
+                        .LineRight("СmdMcEnroeAvatar.png", "Leslie", "Thank you. I think I'll stick with Lawrence, though.")
+                        .Line("LarryAvatar.png", "Larry", "Very well, Leslie. Permission to be excused?")
+                        .LineRight("СmdMcEnroeAvatar.png", "Leslie", "Granted.")
+                        
+                        .Exposition("Larry takes a curt military bow, steps out of the commander's cabin and closes the door behind him. After a long day of system integrity checks on the life support software on board the Commercial Mining Vessel Amehait, his bunk is all he can think of. It's just -")
+                        .Exposition("*Loud music plays*")
+                        .Exposition("- well, bunk is in his cabin, and his cabin is on the other side of the mess, and the mess, at this hour in the early night, is just that, and the rest is chock full of loud, obnoxious, big, smelly… manly miners enjoying their evening leave. Ugh.")
 
-                        .Line("LarryAvatar.png", "SW Spp. O. Dosser", "")
-                        .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "")
+                        .Line("LarryAvatar.png", "Larry", "")
+                        .LineRight("SigrithrAvatarOff.png.png", "Erroll", "")
+                        .LineRight("SigrithrAvatarOff.png.png", "Jormund", "")
                         .Exposition("")
                         .Fork(new ForkBuilder()
                             .Choice("Eka vaihtoehto", new StoryBuilder()
@@ -334,7 +387,7 @@ namespace Fgj22.App
                         .CounterFork(new CounterForkBuilder()
                             .IfMoreThan(0, new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
-                            .Otherwise( new StoryBuilder()
+                            .Otherwise(new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
                         .Line("SigrithrAvatar.png", "Sigrithr", "tama on keskustelun loppu")
                         .GoToLevel();
