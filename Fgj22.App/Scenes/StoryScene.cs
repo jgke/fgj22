@@ -22,6 +22,12 @@ namespace Fgj22.App
         {
             cycleStory();
         }
+        bool Skip(Action cycleStory)
+        {
+            Log.Information("StoryPiece Skip {@A}", this);
+            DoCycle(cycleStory);
+            return true;
+        }
     }
 
     public static class UiComponents
@@ -194,12 +200,18 @@ namespace Fgj22.App
                 ChoiceBuilders[choice.Value].CreateUI(table, entity, cycleStory);
             }
         }
+
+        public bool Skip(Action cycleStory) {
+            Log.Information("Fork Skip {@A}", this);
+            return false;
+        }
     }
 
     class CounterFork : StoryPiece
     {
         List<Func<int, bool>> Conditions;
         List<StoryBuilder> Builders;
+        StoryBuilder currentStory = null;
 
         public CounterFork(List<Func<int, bool>> conditions, List<StoryBuilder> builders)
         {
@@ -209,16 +221,23 @@ namespace Fgj22.App
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
+            if(currentStory == null) {
             Log.Information("CounterFork {@A}", this);
             for (int i = 0; i < Conditions.Count; i++)
             {
                 if (Conditions[i](GameState.Instance.Counter))
                 {
-                    Builders[i].CreateUI(table, entity, cycleStory);
-                    return;
+                    currentStory = Builders[i];
+                    break;
                 }
             }
-            throw new Exception("Unreachable");
+
+            currentStory.CreateUI(table, entity, cycleStory);
+        }
+        }
+        public bool Skip(Action cycleStory) {
+            Log.Information("CounterFork Skip {@A}", this);
+            return currentStory.Skip(cycleStory);
         }
     }
 
@@ -228,6 +247,10 @@ namespace Fgj22.App
         {
             Log.Information("GoToLevel {@A}", this);
             GameState.Instance.DoTransition(() => new GameplayScene());
+        }
+        public bool Skip(Action cycleStory) {
+            Log.Information("GoToLevel Skip {@A}", this);
+            return false;
         }
     }
 
@@ -341,6 +364,27 @@ namespace Fgj22.App
                     cycleStory();
                 }
             });
+        }
+
+        public bool Skip(Action cycleStory) {
+            Log.Information("StoryBuilder Skip {@A}", this);
+            if (currentStoryLine <= lines.Count - 1) {
+                Log.Information("StoryBuilder Skip inner {@A}", this);
+                var line = lines[currentStoryLine];
+                var ret = line.Skip(() => {
+                    Log.Information("StoryBuilder Skip to next part {@A}", this);
+                    currentStoryLine += 1;
+                });
+                if(ret) {
+                    Log.Information("StoryBuilder Skip recurse {@A}", this);
+                    return this.Skip(cycleStory);
+                } else{
+                    return ret;
+                }
+            } else {
+                cycleStory();
+                return true;
+            }
         }
     }
 
@@ -527,7 +571,7 @@ namespace Fgj22.App
             table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
-            CycleStory();
+            RenderUI();
         }
 
         public override void OnRemovedFromEntity()
@@ -535,7 +579,7 @@ namespace Fgj22.App
             StoryAdvanceButton.Deregister();
         }
 
-        public void CycleStory()
+        public void RenderUI()
         {
             table.ClearChildren();
             storyBuilder.CreateUI(table, Entity, () =>
@@ -544,13 +588,17 @@ namespace Fgj22.App
             });
         }
 
+
+
         void IUpdatable.Update()
         {
-            //if (StoryAdvanceButton.IsPressed)
-            //{
-            //    storyLine += 1;
-            //    CycleStory();
-            //}
+            if (StoryAdvanceButton.IsPressed)
+            {
+                storyBuilder.Skip(() => {
+                    throw new Exception("unreachable");
+                });
+                RenderUI();
+            }
         }
     }
 
