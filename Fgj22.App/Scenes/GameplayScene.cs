@@ -70,7 +70,10 @@ namespace Fgj22.App
 
             if (player == null)
             {
-                throw new Exception("You lost");
+                if(!GameState.Instance.Transitioning) {
+                    GameState.Instance.DoTransition(() => new MenuScene());
+                }
+                return;
             }
 
             var enemy = this.FindComponentOfType<Enemy>();
@@ -81,8 +84,9 @@ namespace Fgj22.App
             }
             if (CompletedTimer < 0)
             {
-                CompletedTimer = 999999;
-                GameState.Instance.DoTransition(() => new ShopScene());
+                if(!GameState.Instance.Transitioning) {
+                    GameState.Instance.DoTransition(() => new ShopScene());
+                }
             }
         }
     }

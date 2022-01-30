@@ -643,7 +643,7 @@ namespace Fgj22.App
 
         void IUpdatable.Update()
         {
-            if (StoryAdvanceButton.IsPressed)
+            if (StoryAdvanceButton.IsPressed && !GameState.Instance.Transitioning)
             {
                 storyBuilder.Skip(() => {
                     throw new Exception("unreachable");
