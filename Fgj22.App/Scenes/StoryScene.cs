@@ -10,6 +10,7 @@ using Nez.UI;
 using System.Collections.Generic;
 using Serilog;
 using System;
+using System.Text;
 using Microsoft.Xna.Framework.Input;
 
 namespace Fgj22.App
@@ -35,6 +36,20 @@ namespace Fgj22.App
             };
             return button1;
         }
+
+        public static string SafeString(string inputString)
+        {
+            return Encoding.ASCII.GetString(
+                Encoding.Convert(
+                    Encoding.UTF8,
+                    Encoding.GetEncoding(
+                        Encoding.ASCII.EncodingName,
+                        new EncoderReplacementFallback("_"),
+                        new DecoderExceptionFallback()
+                        ),
+                    Encoding.UTF8.GetBytes(inputString)
+                ));
+        }
     }
 
     class Line : StoryPiece
@@ -47,8 +62,8 @@ namespace Fgj22.App
         public Line(string avatar, string character, string text, bool characteIsRight)
         {
             this.Avatar = avatar;
-            this.Character = character;
-            this.Text = text;
+            this.Character = UiComponents.SafeString(character);
+            this.Text = UiComponents.SafeString(text);
             this.CharacterIsRight = characteIsRight;
         }
 
@@ -127,7 +142,7 @@ namespace Fgj22.App
 
         public Exposition(string text)
         {
-            this.Text = text;
+            this.Text = UiComponents.SafeString(text);
         }
 
         public void CreateUI(Table table, Entity entity, Action cycleStory)
@@ -161,7 +176,7 @@ namespace Fgj22.App
                 for (int i = 0; i < Choices.Count; i++)
                 {
                     int num = i;
-                    var button1 = UiComponents.WrappingTextButton(Choices[i], () =>
+                    var button1 = UiComponents.WrappingTextButton(UiComponents.SafeString(Choices[i]), () =>
                     {
                         table.Clear();
                         choice = num;
@@ -344,7 +359,7 @@ namespace Fgj22.App
             {
                 case 0:
                     storyBuilder = new StoryBuilder()
-                        .Exposition("29. September 2122, CMV Amehait, Trojan asteroid cluster")
+                        .Exposition("29. September 2122, CMV Amehait, äTrojan asteroid cluster")
                         .LineRight("СmdMcEnroeAvatar.png", "Commander McEnroe", "Thank you yet again, Dosser! How do you always manage to fix my PDA no matter how jumbled up I manage to get it?")
                         .Line("SigrithrAvatar.png", "Sigrithr", "I'm not quite certain myself, ma'am, I just reinstalled Terracotta Contortionist and turned it off and on again. It's probably a driver issue.")
 
@@ -360,7 +375,7 @@ namespace Fgj22.App
                         .CounterFork(new CounterForkBuilder()
                             .IfMoreThan(0, new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit joskus ekan vaihtoehdon"))
-                            .Otherwise( new StoryBuilder()
+                            .Otherwise(new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Et valinnut ekaa vaihtoehtoa")))
                         .Line("SigrithrAvatar.png", "Sigrithr", "tama on keskustelun loppu")
                         .GoToLevel();
