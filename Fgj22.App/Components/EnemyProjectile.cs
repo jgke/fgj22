@@ -5,6 +5,7 @@ using Nez.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Nez.Particles;
 
 namespace Fgj22.App.Components
 {
@@ -38,8 +39,13 @@ namespace Fgj22.App.Components
             Entity.AddComponent(new BoxCollider(Width, Width));
             Entity.AddComponent(new Health(1000));
             Entity.AddComponent(new Lifetime(Lifetime));
+            Entity.AddComponent(new Velocity(Velocity));
 
-            this.AddComponent(new Velocity(Velocity));
+			var config = Entity.Scene.Content.LoadParticleEmitterConfig("Content/particles/Plasma Glow.pex");
+			var _particleEmitter = Entity.AddComponent(new ParticleEmitter(config));
+            _particleEmitter.SetRenderLayer(-100);
+			_particleEmitter.CollisionConfig.Enabled = false;
+			_particleEmitter.SimulateInWorldSpace = true;
         }
     }
 }

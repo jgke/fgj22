@@ -14,7 +14,7 @@ namespace Fgj22.App
 
             Window.AllowUserResizing = true;
             Scene = new MenuScene();
-            DebugRenderEnabled = true;
+            DebugRenderEnabled = false;
         }
     }
 }

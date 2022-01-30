@@ -81,16 +81,16 @@ namespace Fgj22.App.Systems
             var start = Map.WorldToTilePosition(from);
             var end = Map.WorldToTilePosition(to);
 
-            Log.Information("Plotting a route from {start} to {end}", from, to);
-            Log.Information("Map positions: {start} to {end}", start, end);
+            //Log.Information("Plotting a route from {start} to {end}", from, to);
+            //Log.Information("Map positions: {start} to {end}", start, end);
 
             var path = AstarGraph.Search(start, end);
-            Log.Information("Final route: {path}", path);
+            //Log.Information("Final route: {path}", path);
             if (path != null)
             {
                 var convertedPath =
                     path.Select(pos => Map.TileToWorldPosition(pos) + new Vector2(Map.TileWidth, Map.TileHeight) / 2).ToList();
-                Log.Information("Final route in world coordinates: {path}", convertedPath);
+                //Log.Information("Final route in world coordinates: {path}", convertedPath);
                 return convertedPath;
             }
             else
