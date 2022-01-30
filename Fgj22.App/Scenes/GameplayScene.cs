@@ -60,6 +60,8 @@ namespace Fgj22.App
             tiledEntity.AddComponent(cameraBounds);
             tiledEntity.AddComponent(cameraBounds);
 
+            CreateEntity("progressBar").AddComponent(new ProgressBar());
+
             AddSceneComponent(new PathFinder(map));
         }
 
