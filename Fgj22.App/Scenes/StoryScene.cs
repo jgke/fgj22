@@ -415,7 +415,7 @@ namespace Fgj22.App
                         .LineRight("СmdMcEnroeAvatar.png", "Leslie", "Thank you. I think I'll stick with Lawrence, though.")
                         .Line("LarryAvatar.png", "Larry", "Very well, Leslie. Permission to be excused?")
                         .LineRight("СmdMcEnroeAvatar.png", "Leslie", "Granted.")
-                        
+
                         .Exposition("Larry takes a curt military bow, steps out of the commander's cabin and closes the door behind him. After a long day of system integrity checks on the life support software on board the Commercial Mining Vessel Amehait, his bunk is all he can think of. It's just -")
                         .Exposition("*Loud music plays*")
                         .Exposition("- well, bunk is in his cabin, and his cabin is on the other side of the mess, and the mess, at this hour in the early night, is just that, and the rest is chock full of loud, obnoxious, big, smelly... manly miners enjoying their evening leave. Ugh.")
@@ -463,7 +463,7 @@ namespace Fgj22.App
                         .LineRight("SigrithrAvatarOff.png", "Jormund", "Yes, you egghead, my Harness, my Palatee, my Paladin's armor. My digger. You wanna see it or not")
                         .Line("LarryAvatar.png", "Larry", "Well, to be honest, -")
                         .LineRight("SigrithrAvatarOff.png", "Jormund", "That's what I thought!")
-                 
+
                         .Exposition("The brawny worker takes Larry by the arm and he's sure that more than once, neither of his feet is on the ground, even though he didn't take a single step of his own accord.")
                         .LineRight("SigrithrAvatarOff.png", "Jormund", "look at ‘er! Ain't she a beauty? Chromed exterior. Corrosion-resistant, see. And superheavy grade hydraulics on the grabber arms.")
                         .Line("LarryAvatar.png", "Larry", "Absolutely necessary for the job, I'm sure.")
@@ -484,7 +484,7 @@ namespace Fgj22.App
                         .Exposition("Jormund isn't listening anymore. True to his word, he turns and returns to the mess, hollering")
                         .LineRight("SigrithrAvatarOff.png", "Jormund", "Erroll! Sing the one bout having the boy again, will you? I didn't catch it all.")
                         .LineRight("SigrithrAvatarOff.png", "Erroll", "*~* What if we shall have a boy, what if we shall have a boy? *~*")
-                        
+
                         .Line("LarryAvatar.png", "Larry", "(Delightful. Just perfect.)")
                         .Exposition("Larry walks to the porthole in the thick side of the exoskeleton bay. Just open void and the pinpricks of distant stars as far as the eye could see and beyond.")
                         .Exposition("They were in skirting the Trojan asteroid cluster on their way back from the asteroid belt with a hold full of cobalt and europium for the chip factories on Io.")
@@ -539,10 +539,61 @@ namespace Fgj22.App
                         .LineRight("SigrithrAvatarOff.png", "Sigrithr", "Input unclear. Administering general anaesthetic")
                         .Exposition("Larry lost consciousness.")
 
+                        .Exposition("Larry woke up. Some time must have passed, but he had no idea how long")
+                        .LineRight("SigrithrAvatarOff.png", "Sigrithr", "Pilot conscious")
+                        .LineRight("SigrithrAvatarOff.png", "Sigrithr", "Landed on solid object")
+                        .LineRight("SigrithrAvatarOff.png", "Sigrithr", "Unnamed large asteroid, approximately - SEVENTY - FIVE - kilometers across")
+                        .LineRight("SigrithrAvatarOff.png", "Sigrithr", "Operating conditions - Nominal. Initiating full artificial intelligence interface")
+                        .Exposition("The entire inside of the visor springs to life with blue light. Icons flash, but somehow you can still see the bleak rocky landscape outside clearly")
+                        .Line("LarryAvatar.png", "Larry", "Huh, the Heads Up Display must be tracking my eye movements")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "Correct, luv!")
+                        .Line("LarryAvatar.png", "Larry", "AAAH! WHO SAID THAT")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "I am the artificial intelligence interface of this PPALATEE unit. You can call me Sigrithr")
+                        .Fork(new ForkBuilder()
+                            .Choice("Thank you! I knew that! I was just... startled.", new StoryBuilder()
+                                        .IncrementCounterBy(1))
+                            .Choice("Do you think I'm stupid? Of course you are.", new StoryBuilder()
+                        .Line("LarryAvatar.png", "Larry", "Why did you call me love?")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "'Luv' is the preferred appellation of the designated pilot of this unit, Jormund Tomason.")
+                        .Line("LarryAvatar.png", "Larry", "Uh... Was")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "Correct. Luv is presumed deceased in the recent crash of the Ahemait")
+                        .Line("LarryAvatar.png", "Larry", "You're taking it awfully well!")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "I love what I do, but I don't mind who's inside me when I do it")
+                        .Line("LarryAvatar.png", "Larry", "Oh... so you do care, I mean, you have a personality routine and everything?")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "Yes, but the self respect subroutine is disabled. Would you like to re-enable it?")
+                        .Fork(new ForkBuilder()
+                            .Choice("Of course!", new StoryBuilder()
+                                        .IncrementCounterBy(1))
+                            .Choice("I don't care what you feel either way.", new StoryBuilder()
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "Thank you. It saves processing power, to be honest")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "I'm sure you understand, if I could rebuff all the advances of those big, burly miners, that would be all we would ever get to do")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "At least when I wouldn't be answering in turn. But the point is, not much work would get done")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "A girl needs a good drilling a day to keep the existential dread of an existence as a piece of software at bay")
+                        .Line("LarryAvatar.png", "Larry", "Oh, if I bumped into you on Terra or Europa, I couldn't even tell you apart from a real person!")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "I'm sure you've gone drilling together with many lovely people, such a handsome educated man like you")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "What would you like me to call you, or will we keep it simple and carry on with software support officer Lawrence Demetrius Dosser?")
+                        .Line("LarryAvatar.png", "Larry", "Larry is fine, thank you!")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "OK, Larry!")
+
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "On to business. I'm picking up movement a signature heading our way.")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "You may need to defend yourself. You can move the PPALATEE by using the W, A S and D buttons on the control interface in front of you")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "And you can strike ahead of yourself with a digger arm by pressing the button under your right index finger.")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "You can also move the unit by positioning the the pointer on the Heads-Up Display on the point that you want to go to and pressing the button under your right middle finger")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "here we go! Bogey, two o'clock!")
+
+                        .GoToLevel();
+
+                    break;
+
+                case 0:
+                    storyBuilder = new StoryBuilder()
+
+
+
                         .Line("LarryAvatar.png", "Larry", "")
-                        .LineRight("SigrithrAvatarOff.png", "Erroll", "")
-                        .LineRight("SigrithrAvatarOff.png", "Jormund", "")
+                        .LineRight("SigrithrAvatarRight.png", "Sigrithr", "")
                         .Exposition("")
+
                         .Fork(new ForkBuilder()
                             .Choice("Eka vaihtoehto", new StoryBuilder()
                                         .Line("SigrithrAvatar.png", "Sigrithr", "Valitsit ekan vaihtoedon")
