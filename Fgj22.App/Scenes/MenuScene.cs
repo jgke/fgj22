@@ -25,6 +25,15 @@ namespace Fgj22.App
             var table = canvas.Stage.AddElement(new Table());
             table.SetFillParent(true);
 
+            var titleLabel = new Label("Heroes of Materiel and Logic", new LabelStyle()
+            {
+                FontColor = Color.Black,
+                FontScaleX = 3,
+                FontScaleY = 3,
+            });
+            table.Add(titleLabel);
+            table.Row();
+
             var button1 = new TextButton("Start game", TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             table.Add(button1).SetMinWidth(100).SetMinHeight(30);
             table.Row();
