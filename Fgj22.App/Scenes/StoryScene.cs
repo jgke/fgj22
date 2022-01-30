@@ -552,7 +552,7 @@ namespace Fgj22.App
                         .Fork(new ForkBuilder()
                             .Choice("Thank you! I knew that! I was just... startled.", new StoryBuilder()
                                         .IncrementCounterBy(1))
-                            .Choice("Do you think I'm stupid? Of course you are.", new StoryBuilder()
+                            .Choice("Do you think I'm stupid? Of course you are.", new StoryBuilder()))
                         .Line("LarryAvatar.png", "Larry", "Why did you call me love?")
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "'Luv' is the preferred appellation of the designated pilot of this unit, Jormund Tomason.")
                         .Line("LarryAvatar.png", "Larry", "Uh... Was")
@@ -564,7 +564,7 @@ namespace Fgj22.App
                         .Fork(new ForkBuilder()
                             .Choice("Of course!", new StoryBuilder()
                                         .IncrementCounterBy(1))
-                            .Choice("I don't care what you feel either way.", new StoryBuilder()
+                            .Choice("I don't care what you feel either way.", new StoryBuilder()))
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "Thank you. It saves processing power, to be honest")
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "I'm sure you understand, if I could rebuff all the advances of those big, burly miners, that would be all we would ever get to do")
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "At least when I wouldn't be answering in turn. But the point is, not much work would get done")
@@ -580,12 +580,11 @@ namespace Fgj22.App
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "And you can strike ahead of yourself with a digger arm by pressing the button under your right index finger.")
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "You can also move the unit by positioning the the pointer on the Heads-Up Display on the point that you want to go to and pressing the button under your right middle finger")
                         .LineRight("SigrithrAvatarRight.png", "Sigrithr", "here we go! Bogey, two o'clock!")
-
                         .GoToLevel();
 
                     break;
 
-                case 0:
+                case 1:
                     storyBuilder = new StoryBuilder()
 
 
