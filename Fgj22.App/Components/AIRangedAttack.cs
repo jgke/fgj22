@@ -34,6 +34,11 @@ namespace Fgj22.App.Components
                 return;
             }
 
+            if (Entity.GetComponent<Stunned>() != null)
+            {
+                return;
+            }
+
             ReloadLeft -= Time.DeltaTime;
 
             if (Entity.Transform.Position.Pythagoras(Player.Transform.Position) > MinimumShootingDistance)

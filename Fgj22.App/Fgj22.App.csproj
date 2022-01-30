@@ -58,6 +58,9 @@
     <None Update="Content\SigrithrAvatar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Content\stun.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Content\Tileset.tsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

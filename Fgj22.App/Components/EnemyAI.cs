@@ -47,6 +47,11 @@ namespace Fgj22.App.Components
                 return;
             }
 
+            if(Entity.GetComponent<Stunned>() != null)
+            {
+                return;
+            }
+
             FrequencyCounter %= 30;
 
             if (FrequencyCounter == 0)

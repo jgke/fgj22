@@ -263,6 +263,11 @@ namespace Fgj22.App.Components
                     var entity = Entity.Scene.CreateEntity("fireball", Entity.Transform.Position);
                     entity.AddComponent(new Emp(-fb.Angle * Math.PI / 180));
                 }
+                else if(spell is Zap)
+                {
+                    var entity = Entity.Scene.CreateEntity("stun", Entity.Transform.Position);
+                    entity.AddComponent(new Stun());
+                }
             }
         }
 
