@@ -33,6 +33,11 @@ namespace Fgj22.App.Components
         {
             base.Update();
 
+            if(Parent.Entity == null)
+            {
+                return;
+            }
+
             Transform.Position = Parent.Transform.Position + new Vector2((float)(Math.Cos(Parent.Transform.Rotation + RotationPrefix) * DistanceFromParent), (float)(Math.Sin(Parent.Transform.Rotation + RotationPrefix) * DistanceFromParent));
         }
     }
