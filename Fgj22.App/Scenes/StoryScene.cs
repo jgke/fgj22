@@ -610,6 +610,11 @@ namespace Fgj22.App
 
             var menuEntity = CreateEntity("menu", new Vector2(0, 0));
             menuEntity.AddComponent(new StoryComponent());
+
+            var map = Content.LoadTiledMap("Content/tiledMap.tmx");
+            var tiledEntity = CreateEntity("tiled-map-entity");
+            tiledEntity.AddComponent(new TiledMapRenderer(map, "main"))
+                .SetRenderLayer(100);
         }
     }
 }
