@@ -87,6 +87,7 @@ namespace Fgj22.App.Components
                         sprites[0 + 3],
                         sprites[0 + 4]
                     };
+                    Entity.AddComponent(new EnemyAI(Player, Map, this, 1));
                     break;
 
                 default:

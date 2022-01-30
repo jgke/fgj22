@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Fgj22.App;
+using System;
 
 namespace Fgj22.App.Components
 {
@@ -90,7 +91,7 @@ namespace Fgj22.App.Components
 
             Mover.Move(velocity, Parent.BoxCollider, Parent.CollisionState);
 
-            Transform.Rotation = direction.GetAngle();
+            Transform.Rotation = direction.GetAngle() - (float)Math.PI / 2.0f;
 
             FrequencyCounter += 1;
         }
@@ -125,8 +126,8 @@ namespace Fgj22.App.Components
             var positionVector = (Entity.Transform.Position - targetPosition);
             positionVector.Normalize();
 
-            var xMod = ((Random.NextFloat() + 1) / 1.5f);
-            var yMod = ((Random.NextFloat() + 1) / 1.5f);
+            var xMod = ((Nez.Random.NextFloat() + 1) / 1.5f);
+            var yMod = ((Nez.Random.NextFloat() + 1) / 1.5f);
 
             return new Vector2(xMod * positionVector.X, yMod * positionVector.Y) * HoverDistance;
         }
