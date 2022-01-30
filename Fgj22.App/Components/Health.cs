@@ -100,5 +100,12 @@ namespace Fgj22.App.Components
             return texture;
         }
 
+        public override void OnRemovedFromEntity()
+        {
+            base.OnRemovedFromEntity();
+
+            HealthBar.Destroy();
+        }
+
     }
 }

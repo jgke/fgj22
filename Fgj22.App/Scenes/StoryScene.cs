@@ -375,8 +375,8 @@ namespace Fgj22.App
                         .Exposition("- well, bunk is in his cabin, and his cabin is on the other side of the mess, and the mess, at this hour in the early night, is just that, and the rest is chock full of loud, obnoxious, big, smelly… manly miners enjoying their evening leave. Ugh.")
 
                         .Line("LarryAvatar.png", "Larry", "")
-                        .LineRight("SigrithrAvatarOff.png.png", "Erroll", "")
-                        .LineRight("SigrithrAvatarOff.png.png", "Jormund", "")
+                        .LineRight("SigrithrAvatarOff.png", "Erroll", "")
+                        .LineRight("SigrithrAvatarOff.png", "Jormund", "")
                         .Exposition("")
                         .Fork(new ForkBuilder()
                             .Choice("Eka vaihtoehto", new StoryBuilder()
