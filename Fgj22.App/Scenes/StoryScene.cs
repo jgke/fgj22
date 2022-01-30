@@ -17,6 +17,24 @@ namespace Fgj22.App
     interface StoryPiece
     {
         void CreateUI(Table table, Entity entity, Action cycleStory);
+        void DoCycle(Action cycleStory)
+        {
+            cycleStory();
+        }
+    }
+
+    static class UiComponents
+    {
+        public static TextButton WrappingTextButton(string Text, Action act)
+        {
+            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            button1.GetLabel().SetWrap(true);
+            button1.OnClicked += _ =>
+            {
+                act();
+            };
+            return button1;
+        }
     }
 
     class Line : StoryPiece
@@ -41,12 +59,14 @@ namespace Fgj22.App
             var table = new Table();
             mainTable.Add(table).Expand().Bottom().SetFillX();
 
-            LabelStyle labelStyle = new LabelStyle() {
-                    FontColor = Color.Black,
-                    Background = new PrimitiveDrawable(Color.DarkGray)
-                };
+            LabelStyle labelStyle = new LabelStyle()
+            {
+                FontColor = Color.Black,
+                Background = new PrimitiveDrawable(Color.DarkGray)
+            };
 
-            if(this.CharacterIsRight) {
+            if (this.CharacterIsRight)
+            {
                 var fakeTitle = new Label(" ", labelStyle);
                 table.Add(fakeTitle).Expand().Bottom().SetFillX();
 
@@ -55,13 +75,14 @@ namespace Fgj22.App
                 table.Add(title).Bottom().Width(100);
                 table.Row();
 
-                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
                 table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                button1.OnClicked += _ => { cycleStory(); };
 
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
                 table.Add(img).Bottom().Width(100).Height(100);
-            } else {
+            }
+            else
+            {
                 var title = new Label(Character, labelStyle);
                 title.SetAlignment(Align.Left, Align.Bottom);
                 table.Add(title).Bottom().Width(100);
@@ -72,9 +93,8 @@ namespace Fgj22.App
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
                 table.Add(img).Bottom().Width(100).Height(100);
 
-                var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+                var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
                 table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                button1.OnClicked += _ => { cycleStory(); };
             }
         }
     }
@@ -91,6 +111,11 @@ namespace Fgj22.App
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("IncrementCounterBy {@A}", this);
+            DoCycle(cycleStory);
+        }
+
+        public void DoCycle(Action cycleStory)
+        {
             GameState.Instance.Counter += Amount;
             cycleStory();
         }
@@ -109,9 +134,8 @@ namespace Fgj22.App
         {
             Log.Information("Exposition {@A}", this);
             table.Bottom();
-            var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
+            var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
             table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-            button1.OnClicked += _ => { cycleStory(); };
         }
     }
 
@@ -137,14 +161,13 @@ namespace Fgj22.App
                 for (int i = 0; i < Choices.Count; i++)
                 {
                     int num = i;
-                    var button1 = new TextButton(Choices[i], TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
-                    table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
-                    button1.OnClicked += _ =>
+                    var button1 = UiComponents.WrappingTextButton(Choices[i], () =>
                     {
                         table.Clear();
                         choice = num;
                         this.CreateUI(table, entity, cycleStory);
-                    };
+                    });
+                    table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
                 }
             }
             else
@@ -170,8 +193,10 @@ namespace Fgj22.App
         public void CreateUI(Table table, Entity entity, Action cycleStory)
         {
             Log.Information("CounterFork {@A}", this);
-            for (int i = 0; i < Conditions.Count; i++) {
-                if(Conditions[i](GameState.Instance.Counter)) {
+            for (int i = 0; i < Conditions.Count; i++)
+            {
+                if (Conditions[i](GameState.Instance.Counter))
+                {
                     Builders[i].CreateUI(table, entity, cycleStory);
                     return;
                 }
@@ -211,7 +236,8 @@ namespace Fgj22.App
     {
         public List<Func<int, bool>> Conditions;
         public List<StoryBuilder> Builders;
-        public CounterForkBuilder() {
+        public CounterForkBuilder()
+        {
             Conditions = new List<Func<int, bool>>();
             Builders = new List<StoryBuilder>();
         }
