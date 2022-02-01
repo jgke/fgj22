@@ -36,6 +36,9 @@ namespace Fgj22.App
         {
             var button1 = new TextButton(Text, TextButtonStyle.Create(Color.Black, Color.DarkGray, Color.Green));
             button1.GetLabel().SetWrap(true);
+            button1.PadLeft(10);
+            button1.PadRight(10);
+          
             button1.OnClicked += _ =>
             {
                 if(!GameState.Instance.Transitioning) {
@@ -95,29 +98,29 @@ namespace Fgj22.App
 
                 var title = new Label(Character, labelStyle);
                 title.SetAlignment(Align.Right, Align.Bottom);
-                table.Add(title).Bottom().Width(100);
+                table.Add(title).Bottom().Width(64);
                 table.Row();
 
                 var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
-                table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+                table.Add(button1).SetMinHeight(64).Expand().Bottom().SetFillX();
 
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
-                table.Add(img).Bottom().Width(100).Height(100);
+                table.Add(img).Bottom().Width(64).Height(64);
             }
             else
             {
                 var title = new Label(Character, labelStyle);
                 title.SetAlignment(Align.Left, Align.Bottom);
-                table.Add(title).Bottom().Width(100);
+                table.Add(title).Bottom().Width(64);
                 var fakeTitle = new Label(" ", labelStyle);
                 table.Add(fakeTitle).Expand().Bottom().SetFillX();
                 table.Row();
 
                 var img = new Image(entity.Scene.Content.LoadTexture("Content/" + Avatar));
-                table.Add(img).Bottom().Width(100).Height(100);
+                table.Add(img).Bottom().Width(64).Height(64);
 
                 var button1 = UiComponents.WrappingTextButton(Text, cycleStory);
-                table.Add(button1).SetMinHeight(100).Expand().Bottom().SetFillX();
+                table.Add(button1).SetMinHeight(64).Expand().Bottom().SetFillX();
             }
         }
     }
